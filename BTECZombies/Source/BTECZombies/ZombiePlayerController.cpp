@@ -120,7 +120,7 @@ void AZombiePlayerController::Fire()
 	FRotator CameraRotation;
 	GetActorEyesViewPoint(CameraLocation, CameraRotation);
 
-	MuzzleOffset.Set(100.0f, 0.0f, 40.0f);
+	//MuzzleOffset.Set(140.0f, 0.0f, 10.0f);
 
 	//Transfrom the muzzle offset from camera space to world space
 	FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);

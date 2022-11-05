@@ -77,7 +77,7 @@ void AZombieProjectile::FireInDirection(const FVector& ShootDirection)
 void AZombieProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (OtherActor != this && OtherComponent->IsSimulatingPhysics()) {
-		OtherComponent->AddImpulseAtLocation(_pProjectileMovementComponent->Velocity * 10.0f, Hit.ImpactPoint);
+		//OtherComponent->AddImpulseAtLocation(_pProjectileMovementComponent->Velocity * 10.0f, Hit.ImpactPoint);
 	}
 
 	Destroy();
