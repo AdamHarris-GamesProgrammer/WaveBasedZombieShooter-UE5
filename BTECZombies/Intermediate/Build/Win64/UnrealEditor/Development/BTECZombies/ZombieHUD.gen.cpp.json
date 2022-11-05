@@ -1,0 +1,29 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\dev\\unrealengine\\bteczombies\\intermediate\\build\\win64\\unrealeditor\\inc\\bteczombies\\zombiehud.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\dev\\unrealengine\\bteczombies\\intermediate\\build\\win64\\bteczombieseditor\\development\\engine\\sharedpch.engine.shadowerrors.h.pch",
+        "Includes": [
+            "c:\\dev\\unrealengine\\bteczombies\\intermediate\\build\\win64\\unrealeditor\\development\\bteczombies\\definitions.bteczombies.h",
+            "c:\\dev\\unrealengine\\bteczombies\\source\\bteczombies\\zombiehud.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\engine\\classes\\gameframework\\hud.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\engine\\classes\\gameframework\\hudhitbox.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\engine\\classes\\gameframework\\debugtextinfo.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\debugtextinfo.generated.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\hud.generated.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\engine\\classes\\engine\\canvas.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\engine\\public\\canvasitem.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\engine\\classes\\engine\\font.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\engine\\classes\\engine\\fontimportoptions.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\fontimportoptions.generated.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\slatecore\\public\\fonts\\fontproviderinterface.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\slatecore\\fontproviderinterface.generated.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\font.generated.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\canvas.generated.h",
+            "c:\\dev\\unrealengine\\bteczombies\\intermediate\\build\\win64\\unrealeditor\\inc\\bteczombies\\zombiehud.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

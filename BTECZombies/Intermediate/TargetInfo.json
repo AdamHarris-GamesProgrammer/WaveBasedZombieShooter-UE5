@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "BTECZombies",
+			"Path": "C:\\Dev\\UnrealEngine\\BTECZombies\\Source\\BTECZombies.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "BTECZombiesEditor",
+			"Path": "C:\\Dev\\UnrealEngine\\BTECZombies\\Source\\BTECZombiesEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}

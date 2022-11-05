@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\BTECZombies.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{F31BBDD1-B3E8-3BCC-9652-680E16935819}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\BTECZombies.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\BTECZombiesEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <Filter Include="Config">
+      <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Config\HoloLens">
+      <UniqueIdentifier>{4C8DD267-CDE7-336F-8602-F5F485D22BAB}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\HoloLens\HoloLensEngine.ini">
+      <Filter>Config\HoloLens</Filter>
+    </None>
+    <Filter Include="Source\BTECZombies">
+      <UniqueIdentifier>{2BC5EBF5-CB0C-36EE-94B5-9F4B64F7C6D7}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\BTECZombies\BTECZombies.Build.cs">
+      <Filter>Source\BTECZombies</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\BTECZombies\BTECZombies.cpp">
+      <Filter>Source\BTECZombies</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\BTECZombies\BTECZombies.h">
+      <Filter>Source\BTECZombies</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\BTECZombies\BTECZombiesGameModeBase.cpp">
+      <Filter>Source\BTECZombies</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\BTECZombies\BTECZombiesGameModeBase.h">
+      <Filter>Source\BTECZombies</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\BTECZombies\MyCharacter.cpp">
+      <Filter>Source\BTECZombies</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\BTECZombies\MyCharacter.h">
+      <Filter>Source\BTECZombies</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\BTECZombies\ZombieHUD.cpp">
+      <Filter>Source\BTECZombies</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\BTECZombies\ZombieHUD.h">
+      <Filter>Source\BTECZombies</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\BTECZombies\ZombiePlayerController.cpp">
+      <Filter>Source\BTECZombies</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\BTECZombies\ZombiePlayerController.h">
+      <Filter>Source\BTECZombies</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\BTECZombies\ZombieProjectile.cpp">
+      <Filter>Source\BTECZombies</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\BTECZombies\ZombieProjectile.h">
+      <Filter>Source\BTECZombies</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
