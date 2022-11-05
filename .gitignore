@@ -503,3 +503,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+**/Intermediate/*
+**/Binaries/*
