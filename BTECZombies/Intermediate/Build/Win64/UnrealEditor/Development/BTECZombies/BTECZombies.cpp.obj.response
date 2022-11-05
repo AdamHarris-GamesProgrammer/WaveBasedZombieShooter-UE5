@@ -1,4 +1,4 @@
-C:\Dev\UnrealEngine\BTECZombies\Source\BTECZombies\BTECZombies.cpp
+C:\Dev\UnrealEngine\WaveBasedZombieShooter\BTECZombies\Source\BTECZombies\BTECZombies.cpp
 /I .
 /I ..\Intermediate\Build\Win64\UnrealEditor\Inc\Engine
 /I Runtime
@@ -251,8 +251,8 @@ C:\Dev\UnrealEngine\BTECZombies\Source\BTECZombies\BTECZombies.cpp
 /I Runtime\ClothingSystemRuntimeInterface\Public
 /I ..\Intermediate\Build\Win64\UnrealEditor\Inc\AnimationDataController
 /I Developer\AnimationDataController\Public
-/I C:\Dev\UnrealEngine\BTECZombies\Intermediate\Build\Win64\UnrealEditor\Inc\BTECZombies
-/I C:\Dev\UnrealEngine\BTECZombies\Source
+/I C:\Dev\UnrealEngine\WaveBasedZombieShooter\BTECZombies\Intermediate\Build\Win64\UnrealEditor\Inc\BTECZombies
+/I C:\Dev\UnrealEngine\WaveBasedZombieShooter\BTECZombies\Source
 /I ThirdParty\mimalloc\include
 /I ThirdParty\LibTiff\Source\Win64
 /I ThirdParty\LibTiff\Source
@@ -273,12 +273,12 @@ C:\Dev\UnrealEngine\BTECZombies\Source\BTECZombies\BTECZombies.cpp
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt"
-/FI"C:\Dev\UnrealEngine\BTECZombies\Intermediate\Build\Win64\BTECZombiesEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h"
-/FI"C:\Dev\UnrealEngine\BTECZombies\Intermediate\Build\Win64\UnrealEditor\Development\BTECZombies\Definitions.BTECZombies.h"
-/Yu"C:\Dev\UnrealEngine\BTECZombies\Intermediate\Build\Win64\BTECZombiesEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h"
-/Fp"C:\Dev\UnrealEngine\BTECZombies\Intermediate\Build\Win64\BTECZombiesEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h.pch"
-/Fo"C:\Dev\UnrealEngine\BTECZombies\Intermediate\Build\Win64\UnrealEditor\Development\BTECZombies\BTECZombies.cpp.obj"
-/sourceDependencies C:\Dev\UnrealEngine\BTECZombies\Intermediate\Build\Win64\UnrealEditor\Development\BTECZombies\BTECZombies.cpp.json
+/FI"C:\Dev\UnrealEngine\WaveBasedZombieShooter\BTECZombies\Intermediate\Build\Win64\BTECZombiesEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h"
+/FI"C:\Dev\UnrealEngine\WaveBasedZombieShooter\BTECZombies\Intermediate\Build\Win64\UnrealEditor\Development\BTECZombies\Definitions.BTECZombies.h"
+/Yu"C:\Dev\UnrealEngine\WaveBasedZombieShooter\BTECZombies\Intermediate\Build\Win64\BTECZombiesEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h"
+/Fp"C:\Dev\UnrealEngine\WaveBasedZombieShooter\BTECZombies\Intermediate\Build\Win64\BTECZombiesEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h.pch"
+/Fo"C:\Dev\UnrealEngine\WaveBasedZombieShooter\BTECZombies\Intermediate\Build\Win64\UnrealEditor\Development\BTECZombies\BTECZombies.cpp.obj"
+/sourceDependencies C:\Dev\UnrealEngine\WaveBasedZombieShooter\BTECZombies\Intermediate\Build\Win64\UnrealEditor\Development\BTECZombies\BTECZombies.cpp.json
 /Zc:inline
 /nologo
 /Oi

@@ -1,10 +1,10 @@
 {
     "Version": "1.2",
     "Data": {
-        "Source": "c:\\dev\\unrealengine\\bteczombies\\intermediate\\build\\win64\\bteczombieseditor\\development\\engine\\sharedpch.engine.shadowerrors.cpp",
+        "Source": "c:\\dev\\unrealengine\\wavebasedzombieshooter\\bteczombies\\intermediate\\build\\win64\\bteczombieseditor\\development\\engine\\sharedpch.engine.shadowerrors.cpp",
         "ProvidedModule": "",
         "Includes": [
-            "c:\\dev\\unrealengine\\bteczombies\\intermediate\\build\\win64\\bteczombieseditor\\development\\engine\\sharedpch.engine.shadowerrors.h",
+            "c:\\dev\\unrealengine\\wavebasedzombieshooter\\bteczombies\\intermediate\\build\\win64\\bteczombieseditor\\development\\engine\\sharedpch.engine.shadowerrors.h",
             "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\engine\\public\\enginesharedpch.h",
             "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\core\\public\\containers\\containersfwd.h",
             "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\core\\public\\hal\\platform.h",

@@ -1,12 +1,12 @@
 {
     "Version": "1.2",
     "Data": {
-        "Source": "c:\\dev\\unrealengine\\bteczombies\\source\\bteczombies\\zombieprojectile.cpp",
+        "Source": "c:\\dev\\unrealengine\\wavebasedzombieshooter\\bteczombies\\source\\bteczombies\\zombieprojectile.cpp",
         "ProvidedModule": "",
-        "PCH": "c:\\dev\\unrealengine\\bteczombies\\intermediate\\build\\win64\\bteczombieseditor\\development\\engine\\sharedpch.engine.shadowerrors.h.pch",
+        "PCH": "c:\\dev\\unrealengine\\wavebasedzombieshooter\\bteczombies\\intermediate\\build\\win64\\bteczombieseditor\\development\\engine\\sharedpch.engine.shadowerrors.h.pch",
         "Includes": [
-            "c:\\dev\\unrealengine\\bteczombies\\intermediate\\build\\win64\\unrealeditor\\development\\bteczombies\\definitions.bteczombies.h",
-            "c:\\dev\\unrealengine\\bteczombies\\source\\bteczombies\\zombieprojectile.h",
+            "c:\\dev\\unrealengine\\wavebasedzombieshooter\\bteczombies\\intermediate\\build\\win64\\unrealeditor\\development\\bteczombies\\definitions.bteczombies.h",
+            "c:\\dev\\unrealengine\\wavebasedzombieshooter\\bteczombies\\source\\bteczombies\\zombieprojectile.h",
             "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\engine\\classes\\components\\spherecomponent.h",
             "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\engine\\classes\\components\\shapecomponent.h",
             "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\shapecomponent.generated.h",
@@ -15,7 +15,7 @@
             "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\engine\\classes\\gameframework\\movementcomponent.h",
             "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\movementcomponent.generated.h",
             "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\projectilemovementcomponent.generated.h",
-            "c:\\dev\\unrealengine\\bteczombies\\intermediate\\build\\win64\\unrealeditor\\inc\\bteczombies\\zombieprojectile.generated.h"
+            "c:\\dev\\unrealengine\\wavebasedzombieshooter\\bteczombies\\intermediate\\build\\win64\\unrealeditor\\inc\\bteczombies\\zombieprojectile.generated.h"
         ],
         "ImportedModules": [],
         "ImportedHeaderUnits": []

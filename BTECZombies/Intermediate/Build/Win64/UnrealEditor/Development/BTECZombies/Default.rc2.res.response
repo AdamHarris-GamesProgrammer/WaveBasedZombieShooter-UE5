@@ -63,5 +63,5 @@
 /DBUILD_ICON_FILE_NAME="\"..\\Build\\Windows\\Resources\\Default.ico\""
 /DPROJECT_COPYRIGHT_STRING="Fill out your copyright notice in the Description page of Project Settings."
 /DPROJECT_PRODUCT_IDENTIFIER=BTECZombies
-/fo "C:\Dev\UnrealEngine\BTECZombies\Intermediate\Build\Win64\UnrealEditor\Development\BTECZombies\Default.rc2.res"
+/fo "C:\Dev\UnrealEngine\WaveBasedZombieShooter\BTECZombies\Intermediate\Build\Win64\UnrealEditor\Development\BTECZombies\Default.rc2.res"
 "..\Build\Windows\Resources\Default.rc2"

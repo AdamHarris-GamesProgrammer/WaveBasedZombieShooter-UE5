@@ -1,12 +1,12 @@
 {
     "Version": "1.2",
     "Data": {
-        "Source": "c:\\dev\\unrealengine\\bteczombies\\intermediate\\build\\win64\\unrealeditor\\inc\\bteczombies\\zombieplayercontroller.gen.cpp",
+        "Source": "c:\\dev\\unrealengine\\wavebasedzombieshooter\\bteczombies\\intermediate\\build\\win64\\unrealeditor\\inc\\bteczombies\\zombieplayercontroller.gen.cpp",
         "ProvidedModule": "",
-        "PCH": "c:\\dev\\unrealengine\\bteczombies\\intermediate\\build\\win64\\bteczombieseditor\\development\\engine\\sharedpch.engine.shadowerrors.h.pch",
+        "PCH": "c:\\dev\\unrealengine\\wavebasedzombieshooter\\bteczombies\\intermediate\\build\\win64\\bteczombieseditor\\development\\engine\\sharedpch.engine.shadowerrors.h.pch",
         "Includes": [
-            "c:\\dev\\unrealengine\\bteczombies\\intermediate\\build\\win64\\unrealeditor\\development\\bteczombies\\definitions.bteczombies.h",
-            "c:\\dev\\unrealengine\\bteczombies\\source\\bteczombies\\zombieplayercontroller.h",
+            "c:\\dev\\unrealengine\\wavebasedzombieshooter\\bteczombies\\intermediate\\build\\win64\\unrealeditor\\development\\bteczombies\\definitions.bteczombies.h",
+            "c:\\dev\\unrealengine\\wavebasedzombieshooter\\bteczombies\\source\\bteczombies\\zombieplayercontroller.h",
             "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\engine\\classes\\gameframework\\character.h",
             "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\engine\\classes\\gameframework\\charactermovementreplication.h",
             "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\charactermovementreplication.generated.h",
@@ -19,15 +19,15 @@
             "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\engine\\classes\\components\\shapecomponent.h",
             "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\shapecomponent.generated.h",
             "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\capsulecomponent.generated.h",
-            "c:\\dev\\unrealengine\\bteczombies\\source\\bteczombies\\zombieprojectile.h",
+            "c:\\dev\\unrealengine\\wavebasedzombieshooter\\bteczombies\\source\\bteczombies\\zombieprojectile.h",
             "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\engine\\classes\\components\\spherecomponent.h",
             "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\spherecomponent.generated.h",
             "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\engine\\classes\\gameframework\\projectilemovementcomponent.h",
             "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\engine\\classes\\gameframework\\movementcomponent.h",
             "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\movementcomponent.generated.h",
             "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\projectilemovementcomponent.generated.h",
-            "c:\\dev\\unrealengine\\bteczombies\\intermediate\\build\\win64\\unrealeditor\\inc\\bteczombies\\zombieprojectile.generated.h",
-            "c:\\dev\\unrealengine\\bteczombies\\intermediate\\build\\win64\\unrealeditor\\inc\\bteczombies\\zombieplayercontroller.generated.h"
+            "c:\\dev\\unrealengine\\wavebasedzombieshooter\\bteczombies\\intermediate\\build\\win64\\unrealeditor\\inc\\bteczombies\\zombieprojectile.generated.h",
+            "c:\\dev\\unrealengine\\wavebasedzombieshooter\\bteczombies\\intermediate\\build\\win64\\unrealeditor\\inc\\bteczombies\\zombieplayercontroller.generated.h"
         ],
         "ImportedModules": [],
         "ImportedHeaderUnits": []
