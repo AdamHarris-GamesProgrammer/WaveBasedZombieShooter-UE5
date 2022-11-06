@@ -25,7 +25,28 @@ void AZombieEnemy::BeginPlay()
 
 	_pZombieAIController = Cast<AZombieAIController>(GetController());
 
-	_pZombieAIController->GetPathFollowingComponent()->OnRequestFinished.AddUObject(this, &AZombieEnemy::OnAIMoveCompleted);
+	if (_pZombieAIController) {
+		_pZombieAIController->GetPathFollowingComponent()->OnRequestFinished.AddUObject(this, &AZombieEnemy::OnAIMoveCompleted);
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Failed to cast Zombie Controller!"));
+	}
+
+	if (_pPlayerCollisionDetection != nullptr) {
+		_pPlayerCollisionDetection->OnComponentBeginOverlap.AddDynamic(this, &AZombieEnemy::OnPlayerDetectedOverlapBegin);
+		_pPlayerCollisionDetection->OnComponentEndOverlap.AddDynamic(this, &AZombieEnemy::OnPlayerDetectedOverlapEnd);
+
+	}
+
+	if (_pPlayerAttackCollisionDetection != nullptr) {
+		_pPlayerAttackCollisionDetection->OnComponentBeginOverlap.AddDynamic(this, &AZombieEnemy::OnPlayerAttackOverlapBegin);
+		_pPlayerAttackCollisionDetection->OnComponentEndOverlap.AddDynamic(this, &AZombieEnemy::OnPlayerAttackOverlapEnd);
+
+	}
+
+	if (_pDamageCollisionDetection != nullptr) {
+		_pDamageCollisionDetection->OnComponentBeginOverlap.AddDynamic(this, &AZombieEnemy::OnDealDamageOverlapBegin);
+	}
 }
 
 // Called every frame
@@ -44,6 +65,80 @@ void AZombieEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 void AZombieEnemy::OnAIMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)
 {
-	_pZombieAIController->RandomPatrol();
+	if (!PlayerDetected) {
+		_pZombieAIController->RandomPatrol();
+	}
+	else if (PlayerDetected && CanAttackPlayer) {
+		StopSeekingPlayer();
+	}
 }
 
+void AZombieEnemy::MoveToPlayer()
+{
+	if (_pPlayerRef == nullptr) {
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Player Ref is nullptr"));
+		return;
+	}
+	_pZombieAIController->MoveToLocation(_pPlayerRef->GetActorLocation(), _stoppingDistance, true);
+}
+
+void AZombieEnemy::SeekPlayer()
+{
+	MoveToPlayer();
+	//Params: Handle, class, callback, timer duration, in loop
+	GetWorld()->GetTimerManager().SetTimer(_seekPlayerTimerHandle, this, &AZombieEnemy::SeekPlayer, 0.25f, true);
+}
+
+void AZombieEnemy::StopSeekingPlayer()
+{
+	GetWorld()->GetTimerManager().ClearTimer(_seekPlayerTimerHandle);
+}
+
+void AZombieEnemy::OnPlayerDetectedOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	AZombiePlayerController* pc = Cast<AZombiePlayerController>(OtherActor);
+	if (pc) {
+		_pPlayerRef = pc;
+		PlayerDetected = true;
+		SeekPlayer();
+	}
+}
+
+void AZombieEnemy::OnPlayerDetectedOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	AZombiePlayerController* pc = Cast<AZombiePlayerController>(OtherActor);
+	if (pc) {
+		_pPlayerRef = pc;
+		PlayerDetected = false;
+		StopSeekingPlayer();
+		_pZombieAIController->RandomPatrol();
+	}
+}
+
+void AZombieEnemy::OnPlayerAttackOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	AZombiePlayerController* pc = Cast<AZombiePlayerController>(OtherActor);
+	if (pc) {
+		_pPlayerRef = pc;
+		CanAttackPlayer = true;
+	}
+}
+
+void AZombieEnemy::OnPlayerAttackOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	AZombiePlayerController* pc = Cast<AZombiePlayerController>(OtherActor);
+	if (pc) {
+		_pPlayerRef = pc;
+		CanAttackPlayer = false;
+		SeekPlayer();
+	}
+}
+
+void AZombieEnemy::OnDealDamageOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	AZombiePlayerController* pc = Cast<AZombiePlayerController>(OtherActor);
+	if (pc && CanHealDamage) {
+		_pPlayerRef = pc;
+		UE_LOG(LogTemp, Warning, TEXT("Hitting Player"));
+	}
+}

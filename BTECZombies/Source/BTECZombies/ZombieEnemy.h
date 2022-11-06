@@ -35,7 +35,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	bool CanHealDamage;
 
-	class AZombiePlayerCharacter* _pPlayerRef;
+	AZombiePlayerController* _pPlayerRef;
 
 	UPROPERTY(EditAnywhere)
 	USphereComponent* _pPlayerCollisionDetection;
@@ -49,5 +49,39 @@ public:
 	AZombieAIController* _pZombieAIController;
 
 	void OnAIMoveCompleted(struct FAIRequestID RequestID, const struct FPathFollowingResult& Result);
+
+	UPROPERTY()
+	float _stoppingDistance = 100.0f;
+
+	FTimerHandle _seekPlayerTimerHandle;
+
+	UFUNCTION()
+	void MoveToPlayer();
+
+	UFUNCTION()
+	void SeekPlayer();
+
+	UFUNCTION()
+	void StopSeekingPlayer();
+
+	UFUNCTION()
+	void OnPlayerDetectedOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, 
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnPlayerDetectedOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	UFUNCTION()
+	void OnPlayerAttackOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnPlayerAttackOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	UFUNCTION()
+	void OnDealDamageOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 };
