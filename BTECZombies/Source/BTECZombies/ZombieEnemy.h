@@ -7,6 +7,10 @@
 #include "ZombiePlayerController.h"
 #include "Components/BoxComponent.h"
 #include "ZombieAIController.h"
+
+#include "Animation/AnimInstance.h"
+#include "Animation/AnimMontage.h"
+
 #include "ZombieEnemy.generated.h"
 
 UCLASS()
@@ -33,7 +37,15 @@ public:
 	bool CanAttackPlayer;
 
 	UPROPERTY(BlueprintReadWrite)
-	bool CanHealDamage;
+	bool CanDealDamage;
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* _pEnemyAttackMontage;
+
+	UAnimInstance* _pAnimInstance;
+
+	UFUNCTION(BlueprintCallable)
+	void AttackAnimationEnded();
 
 	AZombiePlayerController* _pPlayerRef;
 

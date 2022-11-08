@@ -9,6 +9,8 @@ void AZombieAIController::BeginPlay()
 
 	_pNavArea = FNavigationSystem::GetCurrent<UNavigationSystemV1>(this);
 
+	
+
 	RandomPatrol();
 }
 

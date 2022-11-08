@@ -13,7 +13,7 @@ AZombieEnemy::AZombieEnemy()
 	_pPlayerCollisionDetection = CreateDefaultSubobject<USphereComponent>(TEXT("Player Collision Detection"));
 	_pPlayerAttackCollisionDetection = CreateDefaultSubobject<USphereComponent>(TEXT("Player Attack Collision Detection"));
 	_pDamageCollisionDetection = CreateDefaultSubobject<UBoxComponent>(TEXT("Damage Collision"));
-	_pDamageCollisionDetection->SetupAttachment(GetMesh(), TEXT("hand_r"));
+	_pDamageCollisionDetection->SetupAttachment(GetMesh(), TEXT("RightHand"));
 
 }
 
@@ -47,6 +47,8 @@ void AZombieEnemy::BeginPlay()
 	if (_pDamageCollisionDetection != nullptr) {
 		_pDamageCollisionDetection->OnComponentBeginOverlap.AddDynamic(this, &AZombieEnemy::OnDealDamageOverlapBegin);
 	}
+
+	_pAnimInstance = GetMesh()->GetAnimInstance();
 }
 
 // Called every frame
@@ -63,6 +65,13 @@ void AZombieEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 }
 
+void AZombieEnemy::AttackAnimationEnded()
+{
+	if (CanAttackPlayer) {
+		_pAnimInstance->Montage_Play(_pEnemyAttackMontage);
+	}
+}
+
 void AZombieEnemy::OnAIMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)
 {
 	if (!PlayerDetected) {
@@ -70,6 +79,9 @@ void AZombieEnemy::OnAIMoveCompleted(FAIRequestID RequestID, const FPathFollowin
 	}
 	else if (PlayerDetected && CanAttackPlayer) {
 		StopSeekingPlayer();
+
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Playing Anim"));
+		_pAnimInstance->Montage_Play(_pEnemyAttackMontage);
 	}
 }
 
@@ -130,14 +142,20 @@ void AZombieEnemy::OnPlayerAttackOverlapEnd(UPrimitiveComponent* OverlappedComp,
 	if (pc) {
 		_pPlayerRef = pc;
 		CanAttackPlayer = false;
+
+		_pAnimInstance->Montage_Stop(0.0f, _pEnemyAttackMontage);
 		SeekPlayer();
 	}
 }
 
 void AZombieEnemy::OnDealDamageOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (CanDealDamage) {
+		UE_LOG(LogTemp, Warning, TEXT("Attempting"));
+	}
+
 	AZombiePlayerController* pc = Cast<AZombiePlayerController>(OtherActor);
-	if (pc && CanHealDamage) {
+	if (pc && CanDealDamage) {
 		_pPlayerRef = pc;
 		UE_LOG(LogTemp, Warning, TEXT("Hitting Player"));
 	}
