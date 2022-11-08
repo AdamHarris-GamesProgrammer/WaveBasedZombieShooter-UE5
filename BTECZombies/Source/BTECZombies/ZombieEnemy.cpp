@@ -2,6 +2,7 @@
 
 
 #include "ZombieEnemy.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 AZombieEnemy::AZombieEnemy()
@@ -11,7 +12,11 @@ AZombieEnemy::AZombieEnemy()
 
 
 	_pPlayerCollisionDetection = CreateDefaultSubobject<USphereComponent>(TEXT("Player Collision Detection"));
+	_pPlayerCollisionDetection->SetupAttachment(RootComponent);
+
 	_pPlayerAttackCollisionDetection = CreateDefaultSubobject<USphereComponent>(TEXT("Player Attack Collision Detection"));
+	_pPlayerAttackCollisionDetection->SetupAttachment(RootComponent);
+
 	_pDamageCollisionDetection = CreateDefaultSubobject<UBoxComponent>(TEXT("Damage Collision"));
 	_pDamageCollisionDetection->SetupAttachment(GetMesh(), TEXT("RightHand"));
 
@@ -35,18 +40,17 @@ void AZombieEnemy::BeginPlay()
 	if (_pPlayerCollisionDetection != nullptr) {
 		_pPlayerCollisionDetection->OnComponentBeginOverlap.AddDynamic(this, &AZombieEnemy::OnPlayerDetectedOverlapBegin);
 		_pPlayerCollisionDetection->OnComponentEndOverlap.AddDynamic(this, &AZombieEnemy::OnPlayerDetectedOverlapEnd);
-
 	}
 
 	if (_pPlayerAttackCollisionDetection != nullptr) {
 		_pPlayerAttackCollisionDetection->OnComponentBeginOverlap.AddDynamic(this, &AZombieEnemy::OnPlayerAttackOverlapBegin);
 		_pPlayerAttackCollisionDetection->OnComponentEndOverlap.AddDynamic(this, &AZombieEnemy::OnPlayerAttackOverlapEnd);
-
 	}
 
 	if (_pDamageCollisionDetection != nullptr) {
 		_pDamageCollisionDetection->OnComponentBeginOverlap.AddDynamic(this, &AZombieEnemy::OnDealDamageOverlapBegin);
 	}
+
 
 	_pAnimInstance = GetMesh()->GetAnimInstance();
 }
@@ -55,7 +59,6 @@ void AZombieEnemy::BeginPlay()
 void AZombieEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -67,9 +70,7 @@ void AZombieEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 void AZombieEnemy::AttackAnimationEnded()
 {
-	if (CanAttackPlayer) {
-		_pAnimInstance->Montage_Play(_pEnemyAttackMontage);
-	}
+	AttackPlayer();
 }
 
 void AZombieEnemy::OnAIMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)
@@ -80,8 +81,7 @@ void AZombieEnemy::OnAIMoveCompleted(FAIRequestID RequestID, const FPathFollowin
 	else if (PlayerDetected && CanAttackPlayer) {
 		StopSeekingPlayer();
 
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Playing Anim"));
-		_pAnimInstance->Montage_Play(_pEnemyAttackMontage);
+		AttackPlayer();
 	}
 }
 
@@ -159,4 +159,17 @@ void AZombieEnemy::OnDealDamageOverlapBegin(UPrimitiveComponent* OverlappedComp,
 		_pPlayerRef = pc;
 		UE_LOG(LogTemp, Warning, TEXT("Hitting Player"));
 	}
+}
+
+void AZombieEnemy::AttackPlayer()
+{
+	if (!CanAttackPlayer) return;
+
+	FVector Forward = _pPlayerRef->GetActorLocation() - this->GetActorLocation();
+	FRotator Rot = UKismetMathLibrary::MakeRotFromXZ(Forward, FVector::UpVector);
+	UE_LOG(LogTemp, Warning, TEXT("Attempting Rotation: %s"), *Rot.Vector().ToString());
+	this->SetActorRotation(Rot);
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Playing Anim"));
+	_pAnimInstance->Montage_Play(_pEnemyAttackMontage);
 }
