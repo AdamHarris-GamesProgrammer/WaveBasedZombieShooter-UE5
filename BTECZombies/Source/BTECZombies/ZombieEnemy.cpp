@@ -51,6 +51,8 @@ void AZombieEnemy::BeginPlay()
 		_pDamageCollisionDetection->OnComponentBeginOverlap.AddDynamic(this, &AZombieEnemy::OnDealDamageOverlapBegin);
 	}
 
+	_pZombieAIController->RandomPatrol();
+
 	_currentHealth = _maxHealth;
 	_pAnimInstance = GetMesh()->GetAnimInstance();
 }
@@ -94,6 +96,7 @@ void AZombieEnemy::MoveToPlayer()
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Player Ref is nullptr"));
 		return;
 	}
+
 	_pZombieAIController->MoveToLocation(_pPlayerRef->GetActorLocation(), _stoppingDistance, true);
 }
 

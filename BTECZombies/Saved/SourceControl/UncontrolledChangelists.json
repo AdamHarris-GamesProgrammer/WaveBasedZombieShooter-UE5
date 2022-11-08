@@ -5,7 +5,10 @@
 			"guid": "00000000000000000000000000000000",
 			"description": "Default Uncontrolled Changelist",
 			"files": [
-				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Scenes/Test.umap"
+				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Scenes/Test.umap",
+				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/BP_ZombieGameMode.uasset",
+				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/BP_ZombieEnemy.uasset",
+				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/BP_Zombie.uasset"
 			]
 		}
 	]
