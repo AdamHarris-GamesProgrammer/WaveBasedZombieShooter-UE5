@@ -6,7 +6,7 @@
 void ABTECZombiesGameModeBase::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
 	Super::InitGame(MapName, Options, ErrorMessage);
-	GetWorld()->GetTimerManager().SetTimer(_zombieSpawnTimerHandle, this, &ABTECZombiesGameModeBase::SpawnEnemy, 5.0f, true, 5.0f);
+	GetWorld()->GetTimerManager().SetTimer(_zombieSpawnTimerHandle, this, &ABTECZombiesGameModeBase::SpawnEnemy, 1.0f, true, 1.0f);
 }
 
 void ABTECZombiesGameModeBase::Tick(float DeltaTime)
@@ -26,7 +26,15 @@ void ABTECZombiesGameModeBase::SpawnEnemy()
 	SpawnParams.Owner = this;
 	SpawnParams.Instigator = GetInstigator();
 
-	FVector spawnLocation = FVector(x, y, 100.0f);
+	FVector spawnLocation = FVector(x, y, 190.0f);
 
-	GetWorld()->SpawnActor<AZombieEnemy>(_pZombieEnemy, spawnLocation,FRotator(), SpawnParams);
+	AZombieEnemy* enemy = GetWorld()->SpawnActor<AZombieEnemy>(_pZombieEnemy, spawnLocation,FRotator(), SpawnParams);
+	
+	if (enemy) {
+		AZombieAIController* ai = Cast<AZombieAIController>(enemy->GetController());
+		if (ai) {
+			ai->RandomPatrol();
+		}
+	}
+	
 }

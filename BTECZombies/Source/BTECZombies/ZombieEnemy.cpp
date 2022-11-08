@@ -51,10 +51,12 @@ void AZombieEnemy::BeginPlay()
 		_pDamageCollisionDetection->OnComponentBeginOverlap.AddDynamic(this, &AZombieEnemy::OnDealDamageOverlapBegin);
 	}
 
-	_pZombieAIController->RandomPatrol();
-
 	_currentHealth = _maxHealth;
 	_pAnimInstance = GetMesh()->GetAnimInstance();
+
+	//_pZombieAIController->RandomPatrol();
+
+	IsDead = false;
 }
 
 // Called every frame

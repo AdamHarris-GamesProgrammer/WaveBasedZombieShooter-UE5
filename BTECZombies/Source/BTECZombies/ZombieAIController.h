@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "NavigationSystem.h"
+#include "AI/Navigation/NavigationTypes.h"
 #include "ZombieAIController.generated.h"
 
 /**
@@ -18,10 +19,12 @@ class BTECZOMBIES_API AZombieAIController : public AAIController
 public:
 	void BeginPlay() override;
 
+
+
 private:
 	class UNavigationSystemV1* _pNavArea;
 
-	FVector _randomLocation;
+	FNavLocation _randomLocation;
 
 public:
 	UFUNCTION()

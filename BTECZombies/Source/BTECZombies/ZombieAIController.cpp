@@ -9,17 +9,19 @@ void AZombieAIController::BeginPlay()
 
 	_pNavArea = FNavigationSystem::GetCurrent<UNavigationSystemV1>(this);
 
-	RandomPatrol();
+	//RandomPatrol();
 }
 
 void AZombieAIController::RandomPatrol()
 {
+	//const FVector& Origin, float Radius, FNavLocation& ResultLocation, ANavigationData* NavData, FSharedConstNavQueryFilter QueryFilter
 	AZombieEnemy* e = Cast<AZombieEnemy>(GetPawn());
 	if (e && !e->IsDead) {
 		if (_pNavArea) {
-			_pNavArea->K2_GetRandomReachablePointInRadius(GetWorld(), GetPawn()->GetActorLocation(), _randomLocation, 15000.0f);
+			if (_pNavArea->GetRandomReachablePointInRadius(GetPawn()->GetActorLocation(), 10000.0f, _randomLocation)) {
+				MoveToLocation(_randomLocation.Location);
+			}
 
-			MoveToLocation(_randomLocation);
 		}
 	}
 }
