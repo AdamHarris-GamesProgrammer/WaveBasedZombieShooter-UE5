@@ -51,7 +51,7 @@ void AZombieEnemy::BeginPlay()
 		_pDamageCollisionDetection->OnComponentBeginOverlap.AddDynamic(this, &AZombieEnemy::OnDealDamageOverlapBegin);
 	}
 
-
+	_currentHealth = _maxHealth;
 	_pAnimInstance = GetMesh()->GetAnimInstance();
 }
 
@@ -159,6 +159,20 @@ void AZombieEnemy::OnDealDamageOverlapBegin(UPrimitiveComponent* OverlappedComp,
 
 		_pPlayerRef->TakeDamage(10.0f, e, GetController(), this);
 	}
+}
+
+float AZombieEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float dam = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+
+	_currentHealth -= dam;
+
+	if (_currentHealth <= 0.0f) {
+		//TODO: Trigger Point Gain
+		Destroy();
+	}
+
+	return 0.0f;
 }
 
 void AZombieEnemy::AttackPlayer()

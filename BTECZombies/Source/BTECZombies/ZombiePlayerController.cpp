@@ -140,26 +140,26 @@ void AZombiePlayerController::Fire()
 	FRotator CameraRotation;
 	GetActorEyesViewPoint(CameraLocation, CameraRotation);
 
-	//MuzzleOffset.Set(140.0f, 0.0f, 10.0f);
+	MuzzleOffset.Set(140.0f, 0.0f, 0.0f);
 
 	//Transfrom the muzzle offset from camera space to world space
 	FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
 	
 	FRotator MuzzleRotation = CameraRotation;
-	//MuzzleRotation.Pitch += 10.0f;
 
 	UWorld* World = GetWorld();
-	if (World) {
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.Owner = this;
-		SpawnParams.Instigator = GetInstigator();
+	if (!World) return;
 
-		AZombieProjectile* pProjectile = World->SpawnActor<AZombieProjectile>(ProjectileClass, MuzzleLocation, MuzzleRotation, SpawnParams);
 
-		if (pProjectile) {
-			FVector LaunchDirection = MuzzleRotation.Vector();
-			pProjectile->FireInDirection(LaunchDirection);
-		}
+	FHitResult hit;
+	if (World->LineTraceSingleByChannel(hit, MuzzleLocation, MuzzleLocation + MuzzleRotation.Vector() * 5000.0f, ECC_Pawn)) {
+		if (hit.GetActor() == nullptr) return;
+
+		UE_LOG(LogTemp, Warning, TEXT("Hit Name: %s"), *hit.GetActor()->GetName());
+
+		FPointDamageEvent e(10.0f, hit, hit.ImpactNormal, nullptr);
+
+		hit.GetActor()->TakeDamage(5.0f, e, GetController(), this);
 	}
 }
 
