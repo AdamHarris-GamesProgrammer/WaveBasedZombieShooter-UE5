@@ -45,6 +45,8 @@ void AZombiePlayerController::BeginPlay()
 	check(GEngine != nullptr);
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using AZombiePlayerController"));
+
+	_currentHealth = _maxHealth;
 }
 
 // Called every frame
@@ -76,6 +78,24 @@ void AZombiePlayerController::SetupPlayerInputComponent(UInputComponent* PlayerI
 	PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &AZombiePlayerController::StartJump);
 	PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Released, this, &AZombiePlayerController::StopJump);
 	PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Pressed, this, &AZombiePlayerController::Fire);
+}
+
+float AZombiePlayerController::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float dam = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+
+	if (_isDead) return 0.0f;
+
+	_currentHealth -= dam;
+
+	UE_LOG(LogTemp, Warning, TEXT("Player Health: %f"), _currentHealth);
+
+	if (_currentHealth <= 0.0f) {
+		_isDead = true;
+		UE_LOG(LogTemp, Warning, TEXT("Player Dead"));
+	}
+
+	return dam;
 }
 
 void AZombiePlayerController::MoveForward(float value)

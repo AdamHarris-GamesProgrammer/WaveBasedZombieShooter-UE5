@@ -34,6 +34,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
 	//Handles moving forward and backward
 	UFUNCTION() //Adding UFUNCTION macro means that the engine is aware of these functions and will be included in serialization
 	void MoveForward(float value);
@@ -69,4 +71,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Projectile)
 	TSubclassOf<class AZombieProjectile> ProjectileClass;
 
+	UPROPERTY(VisibleAnywhere)
+	float _maxHealth = 100.0f;
+
+	float _currentHealth;
+
+	bool _isDead = false;
 };

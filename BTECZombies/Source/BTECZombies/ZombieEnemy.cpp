@@ -142,6 +142,7 @@ void AZombieEnemy::OnPlayerAttackOverlapEnd(UPrimitiveComponent* OverlappedComp,
 	if (pc) {
 		_pPlayerRef = pc;
 		CanAttackPlayer = false;
+		CanDealDamage = false;
 
 		_pAnimInstance->Montage_Stop(0.0f, _pEnemyAttackMontage);
 		SeekPlayer();
@@ -150,14 +151,13 @@ void AZombieEnemy::OnPlayerAttackOverlapEnd(UPrimitiveComponent* OverlappedComp,
 
 void AZombieEnemy::OnDealDamageOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (CanDealDamage) {
-		UE_LOG(LogTemp, Warning, TEXT("Attempting"));
-	}
-
 	AZombiePlayerController* pc = Cast<AZombiePlayerController>(OtherActor);
 	if (pc && CanDealDamage) {
 		_pPlayerRef = pc;
-		UE_LOG(LogTemp, Warning, TEXT("Hitting Player"));
+
+		FPointDamageEvent e;
+
+		_pPlayerRef->TakeDamage(10.0f, e, GetController(), this);
 	}
 }
 
@@ -166,10 +166,12 @@ void AZombieEnemy::AttackPlayer()
 	if (!CanAttackPlayer) return;
 
 	FVector Forward = _pPlayerRef->GetActorLocation() - this->GetActorLocation();
+	Forward.Normalize();
 	FRotator Rot = UKismetMathLibrary::MakeRotFromXZ(Forward, FVector::UpVector);
-	UE_LOG(LogTemp, Warning, TEXT("Attempting Rotation: %s"), *Rot.Vector().ToString());
 	this->SetActorRotation(Rot);
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Playing Anim"));
 	_pAnimInstance->Montage_Play(_pEnemyAttackMontage);
+
+	
 }
