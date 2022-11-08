@@ -155,7 +155,7 @@ void AZombiePlayerController::Fire()
 	if (World->LineTraceSingleByChannel(hit, MuzzleLocation, MuzzleLocation + MuzzleRotation.Vector() * 5000.0f, ECC_Pawn)) {
 		if (hit.GetActor() == nullptr) return;
 
-		UE_LOG(LogTemp, Warning, TEXT("Hit Name: %s"), *hit.GetActor()->GetName());
+		//UE_LOG(LogTemp, Warning, TEXT("Hit Name: %s"), *hit.GetActor()->GetName());
 
 		FPointDamageEvent e(10.0f, hit, hit.ImpactNormal, nullptr);
 

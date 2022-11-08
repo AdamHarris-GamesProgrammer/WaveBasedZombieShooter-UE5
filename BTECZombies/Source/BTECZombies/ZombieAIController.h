@@ -26,5 +26,5 @@ private:
 public:
 	UFUNCTION()
 	void RandomPatrol();
-	
+
 };

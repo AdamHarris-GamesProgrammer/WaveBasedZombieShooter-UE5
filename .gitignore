@@ -506,3 +506,6 @@ FodyWeavers.xsd
 
 **/Intermediate/*
 **/Binaries/*
+
+**/Crashes/*
+**/CrashReportClient/*

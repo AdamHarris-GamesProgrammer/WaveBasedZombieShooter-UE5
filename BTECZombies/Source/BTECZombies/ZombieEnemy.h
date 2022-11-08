@@ -34,6 +34,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	bool PlayerDetected;
+	bool IsDead = false;
 	bool CanAttackPlayer;
 
 	UPROPERTY(BlueprintReadWrite)

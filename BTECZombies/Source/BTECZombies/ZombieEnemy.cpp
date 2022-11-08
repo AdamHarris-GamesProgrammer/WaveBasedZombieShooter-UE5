@@ -7,7 +7,7 @@
 // Sets default values
 AZombieEnemy::AZombieEnemy()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 
@@ -26,7 +26,7 @@ AZombieEnemy::AZombieEnemy()
 void AZombieEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 
 	_pZombieAIController = Cast<AZombieAIController>(GetController());
 
@@ -70,11 +70,13 @@ void AZombieEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 void AZombieEnemy::AttackAnimationEnded()
 {
+	if (IsDead) return;
 	AttackPlayer();
 }
 
 void AZombieEnemy::OnAIMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)
 {
+	if (IsDead) return;
 	if (!PlayerDetected) {
 		_pZombieAIController->RandomPatrol();
 	}
@@ -87,6 +89,7 @@ void AZombieEnemy::OnAIMoveCompleted(FAIRequestID RequestID, const FPathFollowin
 
 void AZombieEnemy::MoveToPlayer()
 {
+	if (IsDead) return;
 	if (_pPlayerRef == nullptr) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Player Ref is nullptr"));
 		return;
@@ -96,6 +99,7 @@ void AZombieEnemy::MoveToPlayer()
 
 void AZombieEnemy::SeekPlayer()
 {
+	if (IsDead) return;
 	MoveToPlayer();
 	//Params: Handle, class, callback, timer duration, in loop
 	GetWorld()->GetTimerManager().SetTimer(_seekPlayerTimerHandle, this, &AZombieEnemy::SeekPlayer, 0.25f, true);
@@ -103,11 +107,13 @@ void AZombieEnemy::SeekPlayer()
 
 void AZombieEnemy::StopSeekingPlayer()
 {
+	if (IsDead) return;
 	GetWorld()->GetTimerManager().ClearTimer(_seekPlayerTimerHandle);
 }
 
 void AZombieEnemy::OnPlayerDetectedOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (IsDead) return;
 	AZombiePlayerController* pc = Cast<AZombiePlayerController>(OtherActor);
 	if (pc) {
 		_pPlayerRef = pc;
@@ -118,17 +124,21 @@ void AZombieEnemy::OnPlayerDetectedOverlapBegin(UPrimitiveComponent* OverlappedC
 
 void AZombieEnemy::OnPlayerDetectedOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
+	if (IsDead) return;
+
 	AZombiePlayerController* pc = Cast<AZombiePlayerController>(OtherActor);
 	if (pc) {
 		_pPlayerRef = pc;
 		PlayerDetected = false;
 		StopSeekingPlayer();
 		_pZombieAIController->RandomPatrol();
+
 	}
 }
 
 void AZombieEnemy::OnPlayerAttackOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (IsDead) return;
 	AZombiePlayerController* pc = Cast<AZombiePlayerController>(OtherActor);
 	if (pc) {
 		_pPlayerRef = pc;
@@ -138,19 +148,21 @@ void AZombieEnemy::OnPlayerAttackOverlapBegin(UPrimitiveComponent* OverlappedCom
 
 void AZombieEnemy::OnPlayerAttackOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
+	if (IsDead) return;
 	AZombiePlayerController* pc = Cast<AZombiePlayerController>(OtherActor);
 	if (pc) {
 		_pPlayerRef = pc;
 		CanAttackPlayer = false;
 		CanDealDamage = false;
 
-		_pAnimInstance->Montage_Stop(0.0f, _pEnemyAttackMontage);
+		if (_pAnimInstance) _pAnimInstance->Montage_Stop(0.0f, _pEnemyAttackMontage);
 		SeekPlayer();
 	}
 }
 
 void AZombieEnemy::OnDealDamageOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (IsDead) return;
 	AZombiePlayerController* pc = Cast<AZombiePlayerController>(OtherActor);
 	if (pc && CanDealDamage) {
 		_pPlayerRef = pc;
@@ -164,11 +176,18 @@ void AZombieEnemy::OnDealDamageOverlapBegin(UPrimitiveComponent* OverlappedComp,
 float AZombieEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float dam = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+	if (IsDead) return 0.0f;
 
 	_currentHealth -= dam;
 
 	if (_currentHealth <= 0.0f) {
+		_pPlayerRef = nullptr;
 		//TODO: Trigger Point Gain
+
+		IsDead = true;
+
+		DetachFromControllerPendingDestroy();
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		Destroy();
 	}
 
@@ -177,7 +196,7 @@ float AZombieEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AC
 
 void AZombieEnemy::AttackPlayer()
 {
-	if (!CanAttackPlayer) return;
+	if (!CanAttackPlayer || _pPlayerRef == nullptr) return;
 
 	FVector Forward = _pPlayerRef->GetActorLocation() - this->GetActorLocation();
 	Forward.Normalize();
@@ -186,6 +205,4 @@ void AZombieEnemy::AttackPlayer()
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Playing Anim"));
 	_pAnimInstance->Montage_Play(_pEnemyAttackMontage);
-
-	
 }
