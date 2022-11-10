@@ -26,8 +26,12 @@ private:
 
 	FNavLocation _randomLocation;
 
+	FTimerHandle _SeekPlayerTimerHandle;
+
 public:
 	UFUNCTION()
 	void RandomPatrol();
 
+
+	void PathToPlayer();
 };

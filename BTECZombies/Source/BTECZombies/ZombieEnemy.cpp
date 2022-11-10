@@ -2,6 +2,7 @@
 
 
 #include "ZombieEnemy.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
@@ -19,6 +20,8 @@ AZombieEnemy::AZombieEnemy()
 
 	_pDamageCollisionDetection = CreateDefaultSubobject<UBoxComponent>(TEXT("Damage Collision"));
 	_pDamageCollisionDetection->SetupAttachment(GetMesh(), TEXT("RightHand"));
+
+	GetCharacterMovement()->MaxWalkSpeed = 100.0f;
 
 }
 

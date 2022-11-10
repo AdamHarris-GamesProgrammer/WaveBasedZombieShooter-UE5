@@ -8,6 +8,10 @@
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Scenes/Test.umap",
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/BP_ZombieGameMode.uasset",
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/BP_ZombieEnemy.uasset",
+				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/BP_Window.uasset",
+				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Meshes/Window.uasset",
+				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Scenes/Test_BuiltData.uasset",
+				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Meshes/Fbx_Default_Material.uasset",
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/BP_Zombie.uasset"
 			]
 		}
