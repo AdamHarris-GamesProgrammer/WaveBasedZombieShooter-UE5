@@ -187,6 +187,7 @@ void AZombieEnemy::OnDealDamageOverlapBegin(UPrimitiveComponent* OverlappedComp,
 float AZombieEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float dam = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+
 	if (IsDead) return 0.0f;
 
 	_currentHealth -= dam;

@@ -43,12 +43,20 @@ AZombiePlayerController::AZombiePlayerController()
 void AZombiePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	check(GEngine != nullptr);
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using AZombiePlayerController"));
 
 	_currentHealth = _maxHealth;
+
+	_CurrentWeapon = GetWorld()->SpawnActor<AZombieWeapon>(_StartingWeapon);
+	if (_CurrentWeapon) {
+		FAttachmentTransformRules rules = FAttachmentTransformRules(EAttachmentRule::KeepRelative, true);
+
+		_CurrentWeapon->AttachToComponent(_pFPSMesh, rules, "s_LeftHand");
+		_CurrentWeapon->Init(GetController());
+	}
 }
 
 // Called every frame
@@ -137,8 +145,6 @@ void AZombiePlayerController::StopJump()
 
 void AZombiePlayerController::Fire()
 {
-	if (!ProjectileClass) return;
-
 	FVector CameraLocation;
 	FRotator CameraRotation;
 	GetActorEyesViewPoint(CameraLocation, CameraRotation);
@@ -147,23 +153,8 @@ void AZombiePlayerController::Fire()
 
 	//Transfrom the muzzle offset from camera space to world space
 	FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
-	
-	FRotator MuzzleRotation = CameraRotation;
 
-	UWorld* World = GetWorld();
-	if (!World) return;
-
-
-	FHitResult hit;
-	if (World->LineTraceSingleByChannel(hit, MuzzleLocation, MuzzleLocation + MuzzleRotation.Vector() * 5000.0f, ECC_Pawn)) {
-		if (hit.GetActor() == nullptr) return;
-
-		//UE_LOG(LogTemp, Warning, TEXT("Hit Name: %s"), *hit.GetActor()->GetName());
-
-		FPointDamageEvent e(10.0f, hit, hit.ImpactNormal, nullptr);
-
-		hit.GetActor()->TakeDamage(5.0f, e, GetController(), this);
-	}
+	_CurrentWeapon->PullTrigger(MuzzleLocation, CameraRotation);
 }
 
 void AZombiePlayerController::Interact()

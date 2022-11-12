@@ -15,6 +15,7 @@ AZombieWindow::AZombieWindow()
 
 	_BoardMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Board Mesh"));
 	_BoardMesh->SetupAttachment(_Mesh);
+	
 
 	_OutsidePoint = CreateDefaultSubobject<USceneComponent>(TEXT("Outside Point"));
 	_OutsidePoint->SetupAttachment(_Mesh);
@@ -40,6 +41,7 @@ void AZombieWindow::BeginPlay()
 	_InsideCollider->OnComponentEndOverlap.AddDynamic(this, &AZombieWindow::OnInsideColliderOverlapEnd);
 
 	_BoardMesh->SetVisibility(false);
+	_BoardMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	_TeardownTimer = 0.0f;
 }
@@ -66,6 +68,7 @@ void AZombieWindow::BoardUpWindow()
 {
 	if (_isBlocked) return;
 
+	_BoardMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	_BoardMesh->SetVisibility(true);
 	_isBlocked = true;
 
@@ -126,6 +129,7 @@ void AZombieWindow::TearDownBoard()
 {
 	_isBlocked = false;
 	_BoardMesh->SetVisibility(false);
+	_BoardMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	_TeardownTimer = 0.0f;
 	
 	for (AZombieEnemy* ze : _ZombiesInCollider) {

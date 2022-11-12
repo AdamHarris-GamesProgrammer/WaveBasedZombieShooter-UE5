@@ -6,6 +6,9 @@
 #include "GameFramework/Character.h"
 #include "ZombiePlayerController.h"
 #include "Components/BoxComponent.h"
+#include "Components/SphereComponent.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "ZombieAIController.h"
 
 #include "Animation/AnimInstance.h"
@@ -64,6 +67,8 @@ public:
 	UBoxComponent* _pDamageCollisionDetection;
 
 	AZombieAIController* _pZombieAIController;
+
+
 
 	void OnAIMoveCompleted(struct FAIRequestID RequestID, const struct FPathFollowingResult& Result);
 

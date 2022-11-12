@@ -7,8 +7,8 @@
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "ZombieProjectile.h"
 
+#include "ZombieWeapon.h"
 #include "ZombiePlayerController.generated.h"
 
 
@@ -72,8 +72,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	FVector MuzzleOffset;
 
-	UPROPERTY(EditDefaultsOnly, Category = Projectile)
-	TSubclassOf<class AZombieProjectile> ProjectileClass;
+	UPROPERTY(EditAnywhere, Category = Combat)
+	TSubclassOf<AZombieWeapon> _StartingWeapon;
+
+	AZombieWeapon* _CurrentWeapon;
 
 	class AZombieWindow* _NearbyWindow = nullptr;
 
