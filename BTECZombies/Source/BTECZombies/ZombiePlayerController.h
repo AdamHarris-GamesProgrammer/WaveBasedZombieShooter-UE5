@@ -7,7 +7,6 @@
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
-
 #include "ZombieProjectile.h"
 
 #include "ZombiePlayerController.generated.h"
@@ -36,6 +35,8 @@ public:
 
 	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
+	void SetNearbyWindow(class AZombieWindow* window) { _NearbyWindow = window; }
+
 	//Handles moving forward and backward
 	UFUNCTION() //Adding UFUNCTION macro means that the engine is aware of these functions and will be included in serialization
 	void MoveForward(float value);
@@ -59,6 +60,9 @@ public:
 	UFUNCTION()
 	void Fire();
 
+	UFUNCTION()
+	void Interact();
+
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* _pCameraComponent;
 
@@ -70,6 +74,8 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = Projectile)
 	TSubclassOf<class AZombieProjectile> ProjectileClass;
+
+	class AZombieWindow* _NearbyWindow = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
 	float _maxHealth = 100.0f;

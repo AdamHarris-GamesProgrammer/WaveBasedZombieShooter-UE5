@@ -3,6 +3,7 @@
 
 #include "ZombieEnemy.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "ZombieWindow.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
@@ -22,6 +23,8 @@ AZombieEnemy::AZombieEnemy()
 	_pDamageCollisionDetection->SetupAttachment(GetMesh(), TEXT("RightHand"));
 
 	GetCharacterMovement()->MaxWalkSpeed = 100.0f;
+
+	SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 }
 
@@ -191,6 +194,10 @@ float AZombieEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AC
 	if (_currentHealth <= 0.0f) {
 		_pPlayerRef = nullptr;
 		//TODO: Trigger Point Gain
+
+		if (_NearbyWindow) {
+			_NearbyWindow->RemoveZombie(this);
+		}
 
 		IsDead = true;
 

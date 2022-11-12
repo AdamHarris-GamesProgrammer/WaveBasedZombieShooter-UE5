@@ -45,10 +45,14 @@ public:
 
 	UAnimInstance* _pAnimInstance;
 
+	class AZombieWindow* _NearbyWindow = nullptr;
+
+	void SetNearbyWindow(class AZombieWindow* Window) { _NearbyWindow = Window; }
+
 	UFUNCTION(BlueprintCallable)
 	void AttackAnimationEnded();
 
-	AZombiePlayerController* _pPlayerRef;
+	class AZombiePlayerController* _pPlayerRef;
 
 	UPROPERTY(EditAnywhere)
 	USphereComponent* _pPlayerCollisionDetection;

@@ -4,6 +4,8 @@
 #include "ZombiePlayerController.h"
 #include "Camera/CameraComponent.h"
 
+#include "ZombieWindow.h"
+
 // Sets default values
 AZombiePlayerController::AZombiePlayerController()
 {
@@ -78,6 +80,7 @@ void AZombiePlayerController::SetupPlayerInputComponent(UInputComponent* PlayerI
 	PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &AZombiePlayerController::StartJump);
 	PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Released, this, &AZombiePlayerController::StopJump);
 	PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Pressed, this, &AZombiePlayerController::Fire);
+	PlayerInputComponent->BindAction("Interact", EInputEvent::IE_Pressed, this, &AZombiePlayerController::Interact);
 }
 
 float AZombiePlayerController::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -160,6 +163,13 @@ void AZombiePlayerController::Fire()
 		FPointDamageEvent e(10.0f, hit, hit.ImpactNormal, nullptr);
 
 		hit.GetActor()->TakeDamage(5.0f, e, GetController(), this);
+	}
+}
+
+void AZombiePlayerController::Interact()
+{
+	if (_NearbyWindow) {
+		_NearbyWindow->BoardUpWindow();
 	}
 }
 
