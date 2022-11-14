@@ -79,6 +79,16 @@ public:
 		return timeRemaining / _ReloadDuration;
 	}
 
+	UFUNCTION(BlueprintCallable)
+	bool IsReloading() {
+		return _isReloading;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	float GetReloadDuration() {
+		return _ReloadDuration;
+	}
+
 	AController* _OwningController;
 
 	UPROPERTY(EditDefaultsOnly)
@@ -92,6 +102,18 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	USkeletalMeshComponent* _Mesh;
+
+	UPROPERTY(EditDefaultsOnly, Category = SFX)
+	USoundBase* _FireSFX;
+
+	UPROPERTY(EditDefaultsOnly, Category = SFX)
+	USoundBase* _DryFireSFX;
+
+	UPROPERTY(EditDefaultsOnly, Category = SFX)
+	USoundBase* _StartReloadSFX;
+
+	UPROPERTY(EditDefaultsOnly, Category = SFX)
+	USoundBase* _EndReloadSFX;
 
 	UPROPERTY(EditDefaultsOnly)
 	USceneComponent* _MuzzleFlashLocation;

@@ -82,6 +82,21 @@ public:
 		return _CurrentWeapon;
 	}
 
+	UFUNCTION(BlueprintCallable)
+	FString GetAmmoText() {
+		FString val = FString::FromInt(_CurrentWeapon->GetRemainingBullets()) + "/" + FString::FromInt(_CurrentWeapon->GetClipSize());
+		return val;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	float GetReloadPercentage() {
+		if (!_CurrentWeapon->IsReloading()) return 0.0f;
+
+		float timeRemaining = _CurrentWeapon->GetReloadTimeRemaining();
+
+		return timeRemaining / _CurrentWeapon->GetReloadDuration();
+	}
+
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* _pCameraComponent;
 

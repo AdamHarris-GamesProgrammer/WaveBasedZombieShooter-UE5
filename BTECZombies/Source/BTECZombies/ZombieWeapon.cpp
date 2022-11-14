@@ -43,6 +43,10 @@ void AZombieWeapon::StartReload()
 	if (_isReloading) return;
 	_isReloading = true;
 	GetWorld()->GetTimerManager().SetTimer(_ReloadTimerHandle, this, &AZombieWeapon::FinishReload, _ReloadDuration, false);
+	
+	if (_StartReloadSFX != nullptr) {
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), _StartReloadSFX, GetActorLocation());
+	}
 }
 
 void AZombieWeapon::FinishReload()
@@ -50,15 +54,30 @@ void AZombieWeapon::FinishReload()
 	_isReloading = false;
 	_CurrentBulletsInClip = _ClipSize;
 	GetWorld()->GetTimerManager().ClearTimer(_ReloadTimerHandle);
+
+	if (_EndReloadSFX != nullptr) {
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), _EndReloadSFX, GetActorLocation());
+	}
 }
 
 void AZombieWeapon::PullTrigger(FVector Origin, FRotator Rotation)
 {
-	if (_CurrentBulletsInClip == 0) return;
+	if (_isReloading) return;
 
 	UWorld* World = GetWorld();
 	if (!World) return;
 
+	if (_CurrentBulletsInClip == 0) {
+		if (_DryFireSFX != nullptr) {
+			UGameplayStatics::PlaySoundAtLocation(World, _DryFireSFX, Origin);
+		}
+		return;
+	}
+
+
+	if (_FireSFX != nullptr) {
+		UGameplayStatics::PlaySoundAtLocation(World, _FireSFX, Origin);
+	}
 	_CurrentBulletsInClip--;
 
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(World, _MuzzleVFX, _MuzzleFlashLocation->GetComponentLocation());
