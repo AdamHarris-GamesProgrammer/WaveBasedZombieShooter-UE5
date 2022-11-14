@@ -15,6 +15,5 @@ void AZombieHUD::DrawHUD()
 		FCanvasTileItem TileItem(CrossHairDrawPosition, _pCrosshairTexture->Resource, FLinearColor::White);
 		TileItem.BlendMode = SE_BLEND_Translucent;
 		Canvas->DrawItem(TileItem);
-
 	}
 }

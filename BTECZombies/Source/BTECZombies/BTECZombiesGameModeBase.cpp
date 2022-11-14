@@ -16,6 +16,12 @@ void ABTECZombiesGameModeBase::Tick(float DeltaTime)
 
 }
 
+void ABTECZombiesGameModeBase::BeginPlay()
+{
+	Super::BeginPlay();
+	ChangeMenuWidget(_StartingWidgetClass);
+}
+
 void ABTECZombiesGameModeBase::SpawnEnemy()
 {
 
@@ -37,4 +43,18 @@ void ABTECZombiesGameModeBase::SpawnEnemy()
 		}
 	}
 	
+}
+
+void ABTECZombiesGameModeBase::ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass)
+{
+	if (_CurrentWidget != nullptr) {
+		_CurrentWidget->RemoveFromViewport();
+		_CurrentWidget = nullptr;
+	}
+	if (NewWidgetClass != nullptr) {
+		_CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), NewWidgetClass);
+		if (_CurrentWidget != nullptr) {
+			_CurrentWidget->AddToViewport();
+		}
+	}
 }

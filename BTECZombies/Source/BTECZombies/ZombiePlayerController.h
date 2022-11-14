@@ -63,6 +63,17 @@ public:
 	UFUNCTION()
 	void Interact();
 
+	UFUNCTION(BlueprintCallable)
+	float GetHealthPercentage() {
+		return _currentHealth / _maxHealth;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	FString GetHealthText() {
+		FString val = FString::SanitizeFloat(_currentHealth, 0) + "/" + FString::SanitizeFloat(_maxHealth, 0);
+		return val;
+	}
+
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* _pCameraComponent;
 
