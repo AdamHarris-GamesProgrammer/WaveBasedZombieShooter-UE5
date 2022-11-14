@@ -221,11 +221,7 @@ void AZombieEnemy::AttackPlayer()
 {
 	if (!CanAttackPlayer || _pPlayerRef == nullptr) return;
 
-	FVector Forward = _pPlayerRef->GetActorLocation() - this->GetActorLocation();
-	Forward.Normalize();
-	FRotator Rot = UKismetMathLibrary::MakeRotFromXZ(Forward, FVector::UpVector);
-	this->SetActorRotation(Rot);
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Playing Anim"));
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Playing Anim"));
 	_pAnimInstance->Montage_Play(_pEnemyAttackMontage);
 }

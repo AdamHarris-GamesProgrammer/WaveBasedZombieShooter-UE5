@@ -14,6 +14,8 @@ void AZombieAIController::BeginPlay()
 
 	GetWorld()->GetTimerManager().SetTimer(_SeekPlayerTimerHandle, this, &AZombieAIController::PathToPlayer, 1.0f, true, 0.0f);
 
+	
+
 	//MaxWalkSpeed = 100.0f;
 	//RandomPatrol();
 }
@@ -41,6 +43,7 @@ void AZombieAIController::PathToPlayer()
 	APlayerController* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	if (pc) {
 		MoveToLocation(pc->GetPawn()->GetActorLocation());
+		SetFocus(pc->GetPawn());
 	}
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("Failed to path to Player!"));
