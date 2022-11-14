@@ -65,6 +65,7 @@
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/ParticleSystems/BloodBurst.uasset",
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Material/ProjectileMaterial.uasset",
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/UI/BP_PlayerHealthBar.uasset",
+				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/UI/BP_GameUI.uasset",
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/BP_Zombie.uasset"
 			]
 		}

@@ -28,16 +28,47 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void StartReload();
+	void FinishReload();
+
+	bool _isReloading = false;
+
 	void PullTrigger(FVector Origin, FRotator Rotation);
 
-	UPROPERTY(EditAnywhere)
+	FTimerHandle _ReloadTimerHandle;
+
+	UPROPERTY(EditDefaultsOnly)
 	float _Damage = 10.0f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float _Range = 1500.0f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	int _ClipSize = 14;
+
+	UPROPERTY(EditDefaultsOnly)
+	float _ReloadDuration = 2.5f;
+
+	UFUNCTION(BlueprintCallable)
+	float GetReloadTimeRemaining() const {
+		if (!_isReloading) return 0.0f;
+
+		return GetWorld()->GetTimerManager().GetTimerRemaining(_ReloadTimerHandle);
+	}
+
+	int GetClipSize() const {
+		return _ClipSize;
+	}
+
+	int GetRemainingBullets() const {
+		return _CurrentBulletsInClip;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	FString GetAmmoText() {
+		FString val = FString::FromInt(_CurrentBulletsInClip) + "/" + FString::FromInt(_ClipSize);
+		return val;
+	}
 
 	AController* _OwningController;
 

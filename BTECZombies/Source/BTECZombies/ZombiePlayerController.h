@@ -63,6 +63,9 @@ public:
 	UFUNCTION()
 	void Interact();
 
+	UFUNCTION()
+	void Reload();
+
 	UFUNCTION(BlueprintCallable)
 	float GetHealthPercentage() {
 		return _currentHealth / _maxHealth;
@@ -72,6 +75,11 @@ public:
 	FString GetHealthText() {
 		FString val = FString::SanitizeFloat(_currentHealth, 0) + "/" + FString::SanitizeFloat(_maxHealth, 0);
 		return val;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	AZombieWeapon* GetCurrentWeapon() {
+		return _CurrentWeapon;
 	}
 
 	UPROPERTY(VisibleAnywhere)

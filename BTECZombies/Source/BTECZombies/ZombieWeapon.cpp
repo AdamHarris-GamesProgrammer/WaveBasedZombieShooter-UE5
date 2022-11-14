@@ -38,10 +38,28 @@ void AZombieWeapon::Tick(float DeltaTime)
 
 }
 
+void AZombieWeapon::StartReload()
+{
+	if (_isReloading) return;
+	_isReloading = true;
+	GetWorld()->GetTimerManager().SetTimer(_ReloadTimerHandle, this, &AZombieWeapon::FinishReload, _ReloadDuration, false);
+}
+
+void AZombieWeapon::FinishReload()
+{
+	_isReloading = false;
+	_CurrentBulletsInClip = _ClipSize;
+	GetWorld()->GetTimerManager().ClearTimer(_ReloadTimerHandle);
+}
+
 void AZombieWeapon::PullTrigger(FVector Origin, FRotator Rotation)
 {
+	if (_CurrentBulletsInClip == 0) return;
+
 	UWorld* World = GetWorld();
 	if (!World) return;
+
+	_CurrentBulletsInClip--;
 
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(World, _MuzzleVFX, _MuzzleFlashLocation->GetComponentLocation());
 

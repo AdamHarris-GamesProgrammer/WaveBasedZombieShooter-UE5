@@ -89,6 +89,7 @@ void AZombiePlayerController::SetupPlayerInputComponent(UInputComponent* PlayerI
 	PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Released, this, &AZombiePlayerController::StopJump);
 	PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Pressed, this, &AZombiePlayerController::Fire);
 	PlayerInputComponent->BindAction("Interact", EInputEvent::IE_Pressed, this, &AZombiePlayerController::Interact);
+	PlayerInputComponent->BindAction("Reload", EInputEvent::IE_Pressed, this, &AZombiePlayerController::Reload);
 }
 
 float AZombiePlayerController::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -161,6 +162,13 @@ void AZombiePlayerController::Interact()
 {
 	if (_NearbyWindow) {
 		_NearbyWindow->BoardUpWindow();
+	}
+}
+
+void AZombiePlayerController::Reload()
+{
+	if (_CurrentWeapon) {
+		_CurrentWeapon->StartReload();
 	}
 }
 
