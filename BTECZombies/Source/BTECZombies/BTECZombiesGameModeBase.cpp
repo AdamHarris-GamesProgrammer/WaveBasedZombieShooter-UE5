@@ -2,6 +2,7 @@
 
 
 #include "BTECZombiesGameModeBase.h"
+#include "ZombieEnemy.h"
 
 void ABTECZombiesGameModeBase::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
@@ -19,6 +20,10 @@ void ABTECZombiesGameModeBase::Tick(float DeltaTime)
 void ABTECZombiesGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	_CurrentPoints = 0;
+
+
 	ChangeMenuWidget(_StartingWidgetClass);
 }
 
@@ -57,4 +62,11 @@ void ABTECZombiesGameModeBase::ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidg
 			_CurrentWidget->AddToViewport();
 		}
 	}
+}
+
+void ABTECZombiesGameModeBase::EnemyKilled(AZombieEnemy* KilledEnemy)
+{
+	if (KilledEnemy == nullptr) return;
+
+	_CurrentPoints += KilledEnemy->GetKillPoints();
 }

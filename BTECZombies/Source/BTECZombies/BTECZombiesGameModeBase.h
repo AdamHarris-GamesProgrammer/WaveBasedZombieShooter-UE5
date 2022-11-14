@@ -29,6 +29,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	void ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass);
 
+
+	void EnemyKilled(class AZombieEnemy* KilledEnemy);
+
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AZombieEnemy> _pZombieEnemy;
 
@@ -39,4 +42,14 @@ public:
 
 	UPROPERTY()
 	UUserWidget* _CurrentWidget;
+
+	UFUNCTION(BlueprintCallable)
+	int GetCurrentPoints() const {
+		return _CurrentPoints;
+	}
+
+	int _CurrentPoints;
+
+	int _Highscore;
+
 };

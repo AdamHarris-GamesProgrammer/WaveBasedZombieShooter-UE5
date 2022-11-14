@@ -4,6 +4,8 @@
 #include "ZombieEnemy.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "ZombieWindow.h"
+#include "BTECZombiesGameModeBase.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
@@ -201,6 +203,11 @@ float AZombieEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AC
 		}
 
 		IsDead = true;
+
+		ABTECZombiesGameModeBase* gm = Cast<ABTECZombiesGameModeBase>(GetWorld()->GetAuthGameMode());
+		if (gm) {
+			gm->EnemyKilled(this);
+		}
 
 		DetachFromControllerPendingDestroy();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);

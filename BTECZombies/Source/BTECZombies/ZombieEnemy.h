@@ -68,12 +68,17 @@ public:
 
 	AZombieAIController* _pZombieAIController;
 
-
+	int GetKillPoints() const {
+		return _KillPoints;
+	}
 
 	void OnAIMoveCompleted(struct FAIRequestID RequestID, const struct FPathFollowingResult& Result);
 
 	UPROPERTY()
 	float _stoppingDistance = 100.0f;
+
+	UPROPERTY(EditDefaultsOnly)
+	int _KillPoints = 30;
 
 	FTimerHandle _seekPlayerTimerHandle;
 
