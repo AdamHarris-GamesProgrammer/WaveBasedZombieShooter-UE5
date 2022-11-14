@@ -70,6 +70,15 @@ public:
 		return val;
 	}
 
+	UFUNCTION(BlueprintCallable)
+	float GetReloadPercentage() {
+		if (!_isReloading) return 0.0f;
+
+		float timeRemaining = GetReloadTimeRemaining();
+
+		return timeRemaining / _ReloadDuration;
+	}
+
 	AController* _OwningController;
 
 	UPROPERTY(EditDefaultsOnly)
