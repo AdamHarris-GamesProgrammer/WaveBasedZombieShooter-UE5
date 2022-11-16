@@ -5,6 +5,7 @@
 #include "Camera/CameraComponent.h"
 
 #include "ZombieWindow.h"
+#include "BTECZombiesGameModeBase.h"
 
 // Sets default values
 AZombiePlayerController::AZombiePlayerController()
@@ -105,6 +106,11 @@ float AZombiePlayerController::TakeDamage(float Damage, FDamageEvent const& Dama
 	if (_currentHealth <= 0.0f) {
 		_isDead = true;
 		UE_LOG(LogTemp, Warning, TEXT("Player Dead"));
+
+		ABTECZombiesGameModeBase* gb = Cast<ABTECZombiesGameModeBase>(GetWorld()->GetAuthGameMode());
+		if (gb) {
+			gb->PlayerKilled(this);
+		}
 	}
 
 	return dam;

@@ -41,7 +41,7 @@ void AZombieAIController::RandomPatrol()
 void AZombieAIController::PathToPlayer()
 {
 	APlayerController* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	if (pc) {
+	if (pc != nullptr) {
 		MoveToLocation(pc->GetPawn()->GetActorLocation());
 		SetFocus(pc->GetPawn());
 	}

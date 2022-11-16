@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "ZombieEnemy.h"
 #include "Blueprint/UserWidget.h"
+#include "ZombieSpawnPoint.h"
 #include "BTECZombiesGameModeBase.generated.h"
 
 /**
@@ -32,8 +33,9 @@ public:
 
 	void EnemyKilled(class AZombieEnemy* KilledEnemy);
 
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AZombieEnemy> _pZombieEnemy;
+	void PlayerKilled(class AZombiePlayerController* KilledPlayer);
+
+	FName _CurrentLevelName;
 
 	FTimerHandle _zombieSpawnTimerHandle;
 
@@ -42,6 +44,8 @@ public:
 
 	UPROPERTY()
 	UUserWidget* _CurrentWidget;
+
+	TArray<AZombieSpawnPoint*> _SpawnPoints;
 
 	UFUNCTION(BlueprintCallable)
 	int GetCurrentPoints() const {

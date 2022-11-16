@@ -8,6 +8,8 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 
+#include "GameFramework/PlayerController.h"
+
 #include "ZombieWeapon.h"
 #include "ZombiePlayerController.generated.h"
 
