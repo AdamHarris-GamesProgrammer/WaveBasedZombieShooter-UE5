@@ -83,21 +83,20 @@ void AZombieWeapon::PullTrigger(FVector Origin, FRotator Rotation)
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(World, _MuzzleVFX, _MuzzleFlashLocation->GetComponentLocation());
 
 	FHitResult hit;
-	if (World->LineTraceSingleByChannel(hit, Origin, Origin + Rotation.Vector() * _Range, ECC_Pawn)) {
+	if (World->LineTraceSingleByChannel(hit, Origin, Origin + Rotation.Vector() * _Range, ECC_Visibility)) {
 		if (hit.GetActor() == nullptr) return;
 
 		AZombieEnemy* enemy = Cast<AZombieEnemy>(hit.GetActor());
-		
+
 		FRotator EmmiterRot = hit.ImpactNormal.Rotation();
 
 		if (enemy == nullptr) {
 			return;
 		}
-		//UE_LOG(LogTemp, Warning, TEXT("Hit Name: %s"), *hit.GetActor()->GetName());
 
-		FPointDamageEvent e(10.0f, hit, hit.ImpactNormal, nullptr);
+		FPointDamageEvent e(_WeaponDamage, hit, hit.ImpactNormal, nullptr);
 
-		hit.GetActor()->TakeDamage(5.0f, e, _OwningController, this);
+		hit.GetActor()->TakeDamage(_WeaponDamage, e, _OwningController, this);
 
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(World, _BloodVFX, hit.Location, EmmiterRot);
 	}

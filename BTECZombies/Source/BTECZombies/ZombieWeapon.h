@@ -92,6 +92,9 @@ public:
 	AController* _OwningController;
 
 	UPROPERTY(EditDefaultsOnly)
+	float _WeaponDamage = 10.0f;
+
+	UPROPERTY(EditDefaultsOnly)
 	UNiagaraSystem* _MuzzleVFX;
 
 	UPROPERTY(EditDefaultsOnly)
@@ -119,7 +122,5 @@ public:
 	USceneComponent* _MuzzleFlashLocation;
 
 	int _CurrentBulletsInClip;
-
-	//TODO: Add in SFX, VFX
 
 };

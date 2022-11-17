@@ -14,10 +14,6 @@ AZombieEnemy::AZombieEnemy()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-
-	_pPlayerCollisionDetection = CreateDefaultSubobject<USphereComponent>(TEXT("Player Collision Detection"));
-	_pPlayerCollisionDetection->SetupAttachment(RootComponent);
-
 	_pPlayerAttackCollisionDetection = CreateDefaultSubobject<USphereComponent>(TEXT("Player Attack Collision Detection"));
 	_pPlayerAttackCollisionDetection->SetupAttachment(RootComponent);
 
@@ -43,11 +39,6 @@ void AZombieEnemy::BeginPlay()
 	}
 	else {
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Failed to cast Zombie Controller!"));
-	}
-
-	if (_pPlayerCollisionDetection != nullptr) {
-		_pPlayerCollisionDetection->OnComponentBeginOverlap.AddDynamic(this, &AZombieEnemy::OnPlayerDetectedOverlapBegin);
-		_pPlayerCollisionDetection->OnComponentEndOverlap.AddDynamic(this, &AZombieEnemy::OnPlayerDetectedOverlapEnd);
 	}
 
 	if (_pPlayerAttackCollisionDetection != nullptr) {
@@ -191,6 +182,37 @@ float AZombieEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AC
 	float dam = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
 	if (IsDead) return 0.0f;
+
+	if (DamageEvent.IsOfType(1)) {
+		const FPointDamageEvent* e = static_cast<const FPointDamageEvent*>(&DamageEvent);
+
+		float z = e->HitInfo.ImpactPoint.Z;
+		//UE_LOG(LogTemp, Warning, TEXT("HitLoc: %f"), z);
+
+		float capsuleHeight = GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+		//UE_LOG(LogTemp, Warning, TEXT("Capsule Height: %f"), capsuleHeight);
+
+		float impactPoint = z - capsuleHeight;
+
+		//Add a damage scale if we are above the hips
+		float scale = 1.0f;
+		if (impactPoint > capsuleHeight + (capsuleHeight / 2.0f)) {
+			float diff = impactPoint - capsuleHeight;
+
+			float percent = diff / capsuleHeight;
+			scale += percent * 2.0f;
+		}
+		else if (impactPoint > capsuleHeight) {
+			float diff = impactPoint - capsuleHeight;
+
+			float percent = diff / capsuleHeight;
+			scale += percent;
+		}
+
+		UE_LOG(LogTemp, Warning, TEXT("Damage Scale: %f"), scale);
+
+		dam *= scale;
+	}
 
 	_currentHealth -= dam;
 

@@ -58,9 +58,6 @@ public:
 	class AZombiePlayerController* _pPlayerRef;
 
 	UPROPERTY(EditAnywhere)
-	USphereComponent* _pPlayerCollisionDetection;
-
-	UPROPERTY(EditAnywhere)
 	USphereComponent* _pPlayerAttackCollisionDetection;
 
 	UPROPERTY(EditAnywhere)
