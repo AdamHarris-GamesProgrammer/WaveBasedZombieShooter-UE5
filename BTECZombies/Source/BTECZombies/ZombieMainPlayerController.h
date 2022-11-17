@@ -17,4 +17,5 @@ class BTECZOMBIES_API AZombieMainPlayerController : public APlayerController
 public:
 		virtual void GameHasEnded(class AActor* EndGameFocus = nullptr, bool bIsWinner = false) override;
 	
+		bool _Done = false;
 };

@@ -75,10 +75,11 @@ void ABTECZombiesGameModeBase::PlayerKilled(AZombiePlayerController* KilledPlaye
 {
 	//TODO: Decide on multiplayer?
 	
-
-	AZombieMainPlayerController* pc = Cast<AZombieMainPlayerController>(GetWorld()->GetFirstPlayerController());
-
+	AZombieMainPlayerController* pc = Cast<AZombieMainPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	if (pc) {
 		pc->GameHasEnded();
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Player Controller not found"));
 	}
 }
