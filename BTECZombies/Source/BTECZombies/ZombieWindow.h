@@ -48,6 +48,17 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 		UBoxComponent* _InsideCollider;
 
+	UPROPERTY(EditAnywhere)
+		int _PointsToOpen = 500;
+
+	int GetPointsToOpen() const {
+		return _PointsToOpen;
+	}
+
+	bool IsBlocked() const {
+		return _isBlocked;
+	}
+
 	UPROPERTY()
 	TArray<class AZombieEnemy*> _ZombiesInCollider;
 

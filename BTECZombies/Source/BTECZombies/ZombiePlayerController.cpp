@@ -166,8 +166,15 @@ void AZombiePlayerController::Fire()
 
 void AZombiePlayerController::Interact()
 {
-	if (_NearbyWindow) {
-		_NearbyWindow->BoardUpWindow();
+	if (_NearbyWindow && !_NearbyWindow->IsBlocked()) {
+		ABTECZombiesGameModeBase* gm = Cast<ABTECZombiesGameModeBase>(GetWorld()->GetAuthGameMode());
+		if (gm) {
+			if (gm->GetCurrentPoints() >= _NearbyWindow->GetPointsToOpen()) {
+				gm->SpendPoints(_NearbyWindow->GetPointsToOpen());
+				_NearbyWindow->BoardUpWindow();
+			}
+		}
+
 	}
 }
 
@@ -176,5 +183,12 @@ void AZombiePlayerController::Reload()
 	if (_CurrentWeapon) {
 		_CurrentWeapon->StartReload();
 	}
+}
+
+FString AZombiePlayerController::GetInteractPrompt() {
+	if (_NearbyWindow != nullptr && !_NearbyWindow->IsBlocked()) {
+		return FString(TEXT("Press E to Board Up Window: ")) + FString::FromInt(_NearbyWindow->GetPointsToOpen());
+	}
+	return FString(TEXT(""));
 }
 

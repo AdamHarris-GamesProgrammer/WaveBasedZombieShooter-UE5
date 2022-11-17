@@ -52,6 +52,10 @@ public:
 		return _CurrentPoints;
 	}
 
+	void SpendPoints(int Amount) {
+		_CurrentPoints -= Amount;
+	}
+
 	int _CurrentPoints;
 
 	int _Highscore;

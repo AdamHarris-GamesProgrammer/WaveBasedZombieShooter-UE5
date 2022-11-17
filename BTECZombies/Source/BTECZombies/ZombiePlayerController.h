@@ -91,6 +91,9 @@ public:
 	}
 
 	UFUNCTION(BlueprintCallable)
+		FString GetInteractPrompt();
+
+	UFUNCTION(BlueprintCallable)
 	float GetReloadPercentage() {
 		if (!_CurrentWeapon->IsReloading()) return 0.0f;
 
