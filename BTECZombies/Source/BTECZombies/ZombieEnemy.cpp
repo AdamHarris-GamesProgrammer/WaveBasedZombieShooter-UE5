@@ -187,10 +187,8 @@ float AZombieEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AC
 		const FPointDamageEvent* e = static_cast<const FPointDamageEvent*>(&DamageEvent);
 
 		float z = e->HitInfo.ImpactPoint.Z;
-		//UE_LOG(LogTemp, Warning, TEXT("HitLoc: %f"), z);
 
 		float capsuleHeight = GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
-		//UE_LOG(LogTemp, Warning, TEXT("Capsule Height: %f"), capsuleHeight);
 
 		float impactPoint = z - capsuleHeight;
 

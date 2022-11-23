@@ -29,6 +29,7 @@ void AZombieWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	_AccuracyDebuff = 1.0f - _Accuracy;
 }
 
 // Called every frame
@@ -73,22 +74,42 @@ void AZombieWeapon::PullTrigger(FVector Origin, FRotator Rotation)
 		}
 		return;
 	}
-
-
+	
 	if (_FireSFX != nullptr) {
 		UGameplayStatics::PlaySoundAtLocation(World, _FireSFX, Origin);
 	}
+
 	_CurrentBulletsInClip--;
 
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(World, _MuzzleVFX, _MuzzleFlashLocation->GetComponentLocation());
 
+
+	if (_ShootingPattern.Num() != 0) {
+		_CurrentShootPatternIndex = (_CurrentShootPatternIndex + 1) % +_ShootingPattern.Num();
+		FVector temp = Rotation.Vector() + _ShootingPattern[_CurrentShootPatternIndex] * _AccuracyDebuff;
+		//FVector temp = Rotation.Vector() + _ShootingPattern[_CurrentShootPatternIndex]; //Alternative Approach
+		Rotation = temp.Rotation();
+	}
+
+	//Alternative Approach
+	//FVector t = Rotation.Vector();
+	//t.Y += FMath::FRandRange(-_AccuracyDebuff, _AccuracyDebuff);
+	//t.Z += FMath::FRandRange(-_AccuracyDebuff, _AccuracyDebuff);
+	//Rotation = t.Rotation();
+
 	FHitResult hit;
 	if (World->LineTraceSingleByChannel(hit, Origin, Origin + Rotation.Vector() * _Range, ECC_Visibility)) {
+		UE_LOG(LogTemp, Warning, TEXT("Hit Start: %s"), *hit.TraceStart.ToString());
+		UE_LOG(LogTemp, Warning, TEXT("Hit End: %s"), *hit.TraceEnd.ToString());
+
+		DrawDebugLine(GetWorld(), hit.TraceStart, hit.TraceEnd, FColor::Red, true, 5.0f, 0U, 1.0f);
+
 		if (hit.GetActor() == nullptr) return;
 
 		AZombieEnemy* enemy = Cast<AZombieEnemy>(hit.GetActor());
 
 		FRotator EmmiterRot = hit.ImpactNormal.Rotation();
+
 
 		if (enemy == nullptr) {
 			return;

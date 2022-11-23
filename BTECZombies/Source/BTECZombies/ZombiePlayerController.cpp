@@ -162,6 +162,8 @@ void AZombiePlayerController::Fire()
 	FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
 
 	_CurrentWeapon->PullTrigger(MuzzleLocation, CameraRotation);
+
+	
 }
 
 void AZombiePlayerController::Interact()

@@ -123,4 +123,16 @@ public:
 
 	int _CurrentBulletsInClip;
 
+	UPROPERTY(EditDefaultsOnly)
+	float _Accuracy = 0.95f;
+
+	float _AccuracyDebuff;
+
+	UPROPERTY(EditDefaultsOnly)
+	float _RecoilStrength = 1.0f;
+
+	UPROPERTY(EditDefaultsOnly)
+	TArray<FVector> _ShootingPattern;
+
+	int _CurrentShootPatternIndex = 0;
 };
