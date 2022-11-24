@@ -89,6 +89,12 @@ public:
 		return _ReloadDuration;
 	}
 
+	void Hide(bool val) {
+		SetHidden(val);
+		SetActorHiddenInGame(val);
+		_Mesh->SetOwnerNoSee(val);
+	}
+
 	AController* _OwningController;
 
 	UPROPERTY(EditDefaultsOnly)

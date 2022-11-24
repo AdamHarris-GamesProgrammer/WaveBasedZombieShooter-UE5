@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "WeaponSpawnPoint.h"
 
 #include "GameFramework/PlayerController.h"
 
@@ -68,6 +69,12 @@ public:
 	UFUNCTION()
 	void Reload();
 
+	UFUNCTION()
+	void MouseWheelUp();
+
+	UFUNCTION()
+	void MouseWheelDown();
+
 	UFUNCTION(BlueprintCallable)
 	float GetHealthPercentage() {
 		return _currentHealth / _maxHealth;
@@ -102,6 +109,8 @@ public:
 		return timeRemaining / _CurrentWeapon->GetReloadDuration();
 	}
 
+	void EquipWeapon(AZombieWeapon* Weapon);
+
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* _pCameraComponent;
 
@@ -114,7 +123,17 @@ public:
 	UPROPERTY(EditAnywhere, Category = Combat)
 	TSubclassOf<AZombieWeapon> _StartingWeapon;
 
+	AZombieWeapon* _PrimaryWeapon;
+	AZombieWeapon* _SecondaryWeapon;
+
 	AZombieWeapon* _CurrentWeapon;
+
+	void SetNearbyPickupWeapon(AWeaponSpawnPoint* SpawnPoint) {
+		_NearbyWeaponToPickup = SpawnPoint;
+	}
+
+
+	AWeaponSpawnPoint* _NearbyWeaponToPickup;
 
 	class AZombieWindow* _NearbyWindow = nullptr;
 

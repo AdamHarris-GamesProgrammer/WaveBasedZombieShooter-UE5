@@ -51,12 +51,10 @@ void AZombiePlayerController::BeginPlay()
 
 	_currentHealth = _maxHealth;
 
-	_CurrentWeapon = GetWorld()->SpawnActor<AZombieWeapon>(_StartingWeapon);
-	if (_CurrentWeapon) {
-		FAttachmentTransformRules rules = FAttachmentTransformRules(EAttachmentRule::KeepRelative, true);
-
-		_CurrentWeapon->AttachToComponent(_pFPSMesh, rules, "s_LeftHand");
-		_CurrentWeapon->Init(GetController());
+	AZombieWeapon* weapon = GetWorld()->SpawnActor<AZombieWeapon>(_StartingWeapon);
+	if (weapon) {
+		EquipWeapon(weapon);
+		_CurrentWeapon = _PrimaryWeapon;
 	}
 }
 
@@ -64,9 +62,6 @@ void AZombiePlayerController::BeginPlay()
 void AZombiePlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-
-	
 }
 
 // Called to bind functionality to input
@@ -78,12 +73,10 @@ void AZombiePlayerController::SetupPlayerInputComponent(UInputComponent* PlayerI
 	PlayerInputComponent->BindAxis("MoveForward", this, &AZombiePlayerController::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AZombiePlayerController::MoveRight);
 
-
 	//Setup mouse look bindings
 	//Using member method calls here to allow for additional processing such as mouse sensitivity in the future
 	PlayerInputComponent->BindAxis("Turn", this, &AZombiePlayerController::Turn);
 	PlayerInputComponent->BindAxis("LookUp", this, &AZombiePlayerController::LookUp);
-
 
 	//Setup action bindings
 	PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &AZombiePlayerController::StartJump);
@@ -91,6 +84,9 @@ void AZombiePlayerController::SetupPlayerInputComponent(UInputComponent* PlayerI
 	PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Pressed, this, &AZombiePlayerController::Fire);
 	PlayerInputComponent->BindAction("Interact", EInputEvent::IE_Pressed, this, &AZombiePlayerController::Interact);
 	PlayerInputComponent->BindAction("Reload", EInputEvent::IE_Pressed, this, &AZombiePlayerController::Reload);
+	PlayerInputComponent->BindAction("MouseWheelUp", EInputEvent::IE_Pressed, this, &AZombiePlayerController::MouseWheelUp);
+	PlayerInputComponent->BindAction("MouseWheelDown", EInputEvent::IE_Pressed, this, &AZombiePlayerController::MouseWheelDown);
+
 }
 
 float AZombiePlayerController::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -176,7 +172,16 @@ void AZombiePlayerController::Interact()
 				_NearbyWindow->BoardUpWindow();
 			}
 		}
+	}
 
+	if (_NearbyWeaponToPickup) {
+		//TODO: Can afford to pickup
+
+		AZombieWeapon* weapon = GetWorld()->SpawnActor<AZombieWeapon>(_NearbyWeaponToPickup->GetWeaponToSpawn());
+		EquipWeapon(weapon);
+
+		_NearbyWeaponToPickup->Destroy();
+		_NearbyWeaponToPickup = nullptr;
 	}
 }
 
@@ -187,10 +192,63 @@ void AZombiePlayerController::Reload()
 	}
 }
 
+void AZombiePlayerController::MouseWheelUp()
+{
+	if (_SecondaryWeapon == nullptr) return;
+
+	if (_CurrentWeapon == _PrimaryWeapon) {
+		_PrimaryWeapon->Hide(true);
+		_CurrentWeapon = _SecondaryWeapon;
+		_SecondaryWeapon->Hide(false);
+	}
+	else {
+		_SecondaryWeapon->Hide(true);
+		_CurrentWeapon = _PrimaryWeapon;
+		_PrimaryWeapon->Hide(false);
+	}
+}
+
+void AZombiePlayerController::MouseWheelDown()
+{
+	if (_SecondaryWeapon == nullptr) return;
+
+	if (_CurrentWeapon == _PrimaryWeapon) {
+		_PrimaryWeapon->Hide(true);
+		_CurrentWeapon = _SecondaryWeapon;
+		_SecondaryWeapon->Hide(false);
+	}
+	else {
+		_SecondaryWeapon->Hide(true);
+		_CurrentWeapon = _PrimaryWeapon;
+		_PrimaryWeapon->Hide(false);
+	}
+}
+
 FString AZombiePlayerController::GetInteractPrompt() {
 	if (_NearbyWindow != nullptr && !_NearbyWindow->IsBlocked()) {
 		return FString(TEXT("Press E to Board Up Window: ")) + FString::FromInt(_NearbyWindow->GetPointsToOpen());
 	}
 	return FString(TEXT(""));
+}
+
+void AZombiePlayerController::EquipWeapon(AZombieWeapon* Weapon)
+{
+	FAttachmentTransformRules rules = FAttachmentTransformRules(EAttachmentRule::KeepRelative, true);
+
+	Weapon->AttachToComponent(_pFPSMesh, rules, "s_LeftHand");
+	Weapon->Init(GetController());
+
+	if (_PrimaryWeapon == nullptr) {
+		_PrimaryWeapon = Weapon;
+		return;
+	}
+
+	if (_SecondaryWeapon == nullptr) {
+		_SecondaryWeapon = Weapon;
+		return;
+	}
+
+	//TODO: handle swapping weapon logic
+	_CurrentWeapon = Weapon;
 }
 
