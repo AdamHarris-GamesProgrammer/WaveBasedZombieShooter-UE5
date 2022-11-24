@@ -55,6 +55,7 @@ void AZombiePlayerController::BeginPlay()
 	if (weapon) {
 		EquipWeapon(weapon);
 		_CurrentWeapon = _PrimaryWeapon;
+		_CurrentWeapon->Hide(false);
 	}
 }
 
@@ -86,7 +87,6 @@ void AZombiePlayerController::SetupPlayerInputComponent(UInputComponent* PlayerI
 	PlayerInputComponent->BindAction("Reload", EInputEvent::IE_Pressed, this, &AZombiePlayerController::Reload);
 	PlayerInputComponent->BindAction("MouseWheelUp", EInputEvent::IE_Pressed, this, &AZombiePlayerController::MouseWheelUp);
 	PlayerInputComponent->BindAction("MouseWheelDown", EInputEvent::IE_Pressed, this, &AZombiePlayerController::MouseWheelDown);
-
 }
 
 float AZombiePlayerController::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -158,8 +158,6 @@ void AZombiePlayerController::Fire()
 	FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
 
 	_CurrentWeapon->PullTrigger(MuzzleLocation, CameraRotation);
-
-	
 }
 
 void AZombiePlayerController::Interact()
@@ -237,6 +235,7 @@ void AZombiePlayerController::EquipWeapon(AZombieWeapon* Weapon)
 
 	Weapon->AttachToComponent(_pFPSMesh, rules, "s_LeftHand");
 	Weapon->Init(GetController());
+	Weapon->Hide(true);
 
 	if (_PrimaryWeapon == nullptr) {
 		_PrimaryWeapon = Weapon;
@@ -247,8 +246,5 @@ void AZombiePlayerController::EquipWeapon(AZombieWeapon* Weapon)
 		_SecondaryWeapon = Weapon;
 		return;
 	}
-
-	//TODO: handle swapping weapon logic
-	_CurrentWeapon = Weapon;
 }
 

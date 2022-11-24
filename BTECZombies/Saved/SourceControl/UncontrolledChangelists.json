@@ -78,6 +78,10 @@
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Meshes/Zombie/Ch10_nonPBR_PhysicsAsset.uasset",
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/BP_Pistol.uasset",
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/BP_WeaponSpawnPoint.uasset",
+				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/SFX/Weapons/gun_pistol_dry_fire_03.uasset",
+				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/SFX/Weapons/gun_pistol_remove_mag_01.uasset",
+				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/SFX/Weapons/gun_pistol_insert_mag_01.uasset",
+				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/SFX/Weapons/gun_pistol_shot_01.uasset",
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/UI/BP_PlayerHealthBar.uasset",
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/BP_Zombie.uasset"
 			]
