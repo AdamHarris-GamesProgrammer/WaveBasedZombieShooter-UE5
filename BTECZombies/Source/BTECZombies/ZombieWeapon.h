@@ -110,6 +110,9 @@ public:
 	UNiagaraSystem* _WallImpactVFX;
 
 	UPROPERTY(EditDefaultsOnly)
+	UNiagaraSystem* _BulletTrailVFX;
+
+	UPROPERTY(EditDefaultsOnly)
 	USkeletalMeshComponent* _Mesh;
 
 	UPROPERTY(EditDefaultsOnly, Category = SFX)
@@ -141,4 +144,34 @@ public:
 	TArray<FVector> _ShootingPattern;
 
 	int _CurrentShootPatternIndex = 0;
+
+	UPROPERTY(EditDefaultsOnly)
+	float _BulletWeight = 100.0f;
+
+	UPROPERTY(EditDefaultsOnly)
+	float _BulletSpeed = 10000.0f;
+
+	UPROPERTY(EditDefaultsOnly)
+	float _BulletLifetime = 5.0f;
+
+	struct Bullet {
+		FVector InitialPosition = FVector();
+		FVector InitialVelocity = FVector();
+
+		float Time = 0.00f;
+
+		bool _Stop = false;
+
+		bool CastSegment(UWorld* World, FHitResult& Hit, FVector Start, FVector End) {
+			if (_Stop) return false;
+
+			return World->LineTraceSingleByChannel(Hit, Start, End,ECC_Visibility);
+		}
+	};
+
+	void UpdateAttributes(Bullet& Bullet);
+
+	FVector GetPosition(Bullet& Bullet);
+
+	TArray<Bullet> _Bullets;
 };

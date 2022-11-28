@@ -37,6 +37,53 @@ void AZombieWeapon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	UWorld* World = GetWorld();
+	for (int i = 0; i < _Bullets.Num(); ++i) {
+		FHitResult hit;
+
+		FVector p0 = GetPosition(_Bullets[i]);
+
+		_Bullets[i].Time += DeltaTime;
+
+		FVector p1 = GetPosition(_Bullets[i]);
+
+		FVector dir = (p0 - p1);
+		dir.Normalize();
+
+		
+
+		//DrawDebugLine(GetWorld(), p0, p1, FColor::Red, false, 5.0f, 0U, 1.0f);
+
+		if (_BulletTrailVFX != nullptr) {
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(World, _BulletTrailVFX, p0, dir.Rotation());
+		}
+
+		if (_Bullets[i].CastSegment(World, hit, p0, p1)) {
+			if (hit.GetActor() == nullptr) continue;
+			
+			_Bullets[i]._Stop = true;
+
+			AZombieEnemy* enemy = Cast<AZombieEnemy>(hit.GetActor());
+			if (enemy == nullptr) continue;
+
+			FPointDamageEvent e(_WeaponDamage, hit, hit.ImpactNormal, nullptr);
+
+			hit.GetActor()->TakeDamage(_WeaponDamage, e, _OwningController, this);
+
+			if (_BloodVFX != nullptr) {
+				FRotator EmmiterRot = hit.ImpactNormal.Rotation();
+				UNiagaraFunctionLibrary::SpawnSystemAtLocation(World, _BloodVFX, hit.Location, EmmiterRot);
+			}
+		}
+
+		UpdateAttributes(_Bullets[i]);
+	}
+
+	_Bullets.RemoveAll([](Bullet bul) {
+		return bul._Stop;
+	});
+
+	//UE_LOG(LogTemp, Warning, TEXT("Bullet Arr Size: %i"), _Bullets.Num());
 }
 
 void AZombieWeapon::StartReload()
@@ -91,35 +138,33 @@ void AZombieWeapon::PullTrigger(FVector Origin, FRotator Rotation)
 		Rotation = temp.Rotation();
 	}
 
+	Bullet bullet;
+	bullet.InitialPosition = Origin;
+
+	FVector dir = Rotation.Vector();
+	dir.Normalize();
+
+	FVector velocity = dir * _BulletSpeed;
+	bullet.InitialVelocity = velocity;
+
+	_Bullets.Add(bullet);
+
 	//Alternative Approach
 	//FVector t = Rotation.Vector();
 	//t.Y += FMath::FRandRange(-_AccuracyDebuff, _AccuracyDebuff);
 	//t.Z += FMath::FRandRange(-_AccuracyDebuff, _AccuracyDebuff);
 	//Rotation = t.Rotation();
+}
 
-	FHitResult hit;
-	if (World->LineTraceSingleByChannel(hit, Origin, Origin + Rotation.Vector() * _Range, ECC_Visibility)) {
-		UE_LOG(LogTemp, Warning, TEXT("Hit Start: %s"), *hit.TraceStart.ToString());
-		UE_LOG(LogTemp, Warning, TEXT("Hit End: %s"), *hit.TraceEnd.ToString());
-
-		DrawDebugLine(GetWorld(), hit.TraceStart, hit.TraceEnd, FColor::Red, true, 5.0f, 0U, 1.0f);
-
-		if (hit.GetActor() == nullptr) return;
-
-		AZombieEnemy* enemy = Cast<AZombieEnemy>(hit.GetActor());
-
-		FRotator EmmiterRot = hit.ImpactNormal.Rotation();
-
-
-		if (enemy == nullptr) {
-			return;
-		}
-
-		FPointDamageEvent e(_WeaponDamage, hit, hit.ImpactNormal, nullptr);
-
-		hit.GetActor()->TakeDamage(_WeaponDamage, e, _OwningController, this);
-
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(World, _BloodVFX, hit.Location, EmmiterRot);
+inline void AZombieWeapon::UpdateAttributes(Bullet& Bullet) {
+	if (Bullet.Time > _BulletLifetime) {
+		Bullet._Stop = true;
 	}
+}
+
+inline FVector AZombieWeapon::GetPosition(Bullet& Bullet) {
+	FVector gravity = FVector::DownVector * 300.0f; //300 is bullet drop
+
+	return Bullet.InitialPosition + (Bullet.InitialVelocity * Bullet.Time) + (0.5f * gravity * Bullet.Time * Bullet.Time);
 }
 
