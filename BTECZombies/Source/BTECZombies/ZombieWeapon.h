@@ -33,7 +33,7 @@ public:
 
 	bool _isReloading = false;
 
-	void PullTrigger(FVector Origin, FRotator Rotation);
+
 
 	FTimerHandle _ReloadTimerHandle;
 
@@ -84,6 +84,10 @@ public:
 		return _isReloading;
 	}
 
+	bool IsFiring() const {
+		return _IsFiring;
+	}
+
 	UFUNCTION(BlueprintCallable)
 	float GetReloadDuration() {
 		return _ReloadDuration;
@@ -94,6 +98,10 @@ public:
 		SetActorHiddenInGame(val);
 		_Mesh->SetOwnerNoSee(val);
 	}
+
+	void StartFiring();
+	void Fire();
+	void EndFiring();
 
 	AController* _OwningController;
 
@@ -153,6 +161,27 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	float _BulletLifetime = 5.0f;
+
+	UPROPERTY(EditDefaultsOnly)
+	int _ProjectileCount = 1;
+
+	UPROPERTY(EditDefaultsOnly)
+	bool _Automatic = false;
+
+	bool _IsFiring = false;
+
+	UPROPERTY(EditDefaultsOnly)
+	float _TimeBetweenShots = 0.3f;
+
+	FTimerHandle _AutoFireTimerHandle;
+
+	void SetOriginRotation(FVector Origin, FRotator Rotation) {
+		_Origin = Origin;
+		_Rotation = Rotation;
+	}
+
+	FVector _Origin;
+	FRotator _Rotation;
 
 	struct Bullet {
 		FVector InitialPosition = FVector();

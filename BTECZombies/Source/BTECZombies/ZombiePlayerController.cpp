@@ -63,6 +63,21 @@ void AZombiePlayerController::BeginPlay()
 void AZombiePlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (_CurrentWeapon == nullptr) return;
+
+	if (_CurrentWeapon->IsFiring()) {
+		FVector CameraLocation;
+		FRotator CameraRotation;
+		GetActorEyesViewPoint(CameraLocation, CameraRotation);
+
+		MuzzleOffset.Set(140.0f, 0.0f, 0.0f);
+
+		//Transfrom the muzzle offset from camera space to world space
+		FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
+
+		_CurrentWeapon->SetOriginRotation(MuzzleLocation, CameraRotation);
+	}
 }
 
 // Called to bind functionality to input
@@ -82,7 +97,10 @@ void AZombiePlayerController::SetupPlayerInputComponent(UInputComponent* PlayerI
 	//Setup action bindings
 	PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &AZombiePlayerController::StartJump);
 	PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Released, this, &AZombiePlayerController::StopJump);
+
 	PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Pressed, this, &AZombiePlayerController::Fire);
+	PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Released, this, &AZombiePlayerController::StopFiring);
+
 	PlayerInputComponent->BindAction("Interact", EInputEvent::IE_Pressed, this, &AZombiePlayerController::Interact);
 	PlayerInputComponent->BindAction("Reload", EInputEvent::IE_Pressed, this, &AZombiePlayerController::Reload);
 	PlayerInputComponent->BindAction("MouseWheelUp", EInputEvent::IE_Pressed, this, &AZombiePlayerController::MouseWheelUp);
@@ -148,16 +166,16 @@ void AZombiePlayerController::StopJump()
 
 void AZombiePlayerController::Fire()
 {
-	FVector CameraLocation;
-	FRotator CameraRotation;
-	GetActorEyesViewPoint(CameraLocation, CameraRotation);
+	if (_CurrentWeapon != nullptr) {
+		_CurrentWeapon->StartFiring();
+	}
+}
 
-	MuzzleOffset.Set(140.0f, 0.0f, 0.0f);
-
-	//Transfrom the muzzle offset from camera space to world space
-	FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
-
-	_CurrentWeapon->PullTrigger(MuzzleLocation, CameraRotation);
+void AZombiePlayerController::StopFiring()
+{
+	if (_CurrentWeapon != nullptr) {
+		_CurrentWeapon->EndFiring();
+	}
 }
 
 void AZombiePlayerController::Interact()

@@ -64,6 +64,9 @@ public:
 	void Fire();
 
 	UFUNCTION()
+	void StopFiring();
+
+	UFUNCTION()
 	void Interact();
 
 	UFUNCTION()
@@ -93,6 +96,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	FString GetAmmoText() {
+		if (_CurrentWeapon == nullptr) return "";
+
 		FString val = FString::FromInt(_CurrentWeapon->GetRemainingBullets()) + "/" + FString::FromInt(_CurrentWeapon->GetClipSize());
 		return val;
 	}
@@ -102,6 +107,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	float GetReloadPercentage() {
+		if (_CurrentWeapon == nullptr) return 0.0f;
+
 		if (!_CurrentWeapon->IsReloading()) return 0.0f;
 
 		float timeRemaining = _CurrentWeapon->GetReloadTimeRemaining();

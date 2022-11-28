@@ -52,7 +52,7 @@ void AZombieWeapon::Tick(float DeltaTime)
 
 		
 
-		//DrawDebugLine(GetWorld(), p0, p1, FColor::Red, false, 5.0f, 0U, 1.0f);
+		DrawDebugLine(GetWorld(), p0, p1, FColor::Red, false, 5.0f, 0U, 1.0f);
 
 		if (_BulletTrailVFX != nullptr) {
 			UNiagaraFunctionLibrary::SpawnSystemAtLocation(World, _BulletTrailVFX, p0, dir.Rotation());
@@ -108,62 +108,82 @@ void AZombieWeapon::FinishReload()
 	}
 }
 
-void AZombieWeapon::PullTrigger(FVector Origin, FRotator Rotation)
+void AZombieWeapon::Fire()
 {
-	if (_isReloading) return;
+	if (_isReloading) {
+		EndFiring();
+		return;
+	}
 
 	UWorld* World = GetWorld();
 	if (!World) return;
 
 	if (_CurrentBulletsInClip == 0) {
 		if (_DryFireSFX != nullptr) {
-			UGameplayStatics::PlaySoundAtLocation(World, _DryFireSFX, Origin);
+			UGameplayStatics::PlaySoundAtLocation(World, _DryFireSFX, _Origin);
 		}
 		return;
 	}
 	
 	if (_FireSFX != nullptr) {
-		UGameplayStatics::PlaySoundAtLocation(World, _FireSFX, Origin);
+		UGameplayStatics::PlaySoundAtLocation(World, _FireSFX, _Origin);
 	}
 
 	_CurrentBulletsInClip--;
 
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(World, _MuzzleVFX, _MuzzleFlashLocation->GetComponentLocation());
 
+	FRotator Rotation = _Rotation;
 
 	if (_ShootingPattern.Num() != 0) {
 		_CurrentShootPatternIndex = (_CurrentShootPatternIndex + 1) % +_ShootingPattern.Num();
 		FVector temp = Rotation.Vector() + _ShootingPattern[_CurrentShootPatternIndex] * _AccuracyDebuff;
-		//FVector temp = Rotation.Vector() + _ShootingPattern[_CurrentShootPatternIndex]; //Alternative Approach
 		Rotation = temp.Rotation();
 	}
 
-	Bullet bullet;
-	bullet.InitialPosition = Origin;
-
 	FVector dir = Rotation.Vector();
-	dir.Normalize();
+	for (int i = 0; i < _ProjectileCount; ++i) {
+		Bullet bullet;
+		bullet.InitialPosition = _Origin;
 
-	FVector velocity = dir * _BulletSpeed;
-	bullet.InitialVelocity = velocity;
+		dir.Y += FMath::FRandRange(-_AccuracyDebuff, _AccuracyDebuff);
+		dir.Z += FMath::FRandRange(-_AccuracyDebuff, _AccuracyDebuff);
+		dir.Normalize();
 
-	_Bullets.Add(bullet);
-
-	//Alternative Approach
-	//FVector t = Rotation.Vector();
-	//t.Y += FMath::FRandRange(-_AccuracyDebuff, _AccuracyDebuff);
-	//t.Z += FMath::FRandRange(-_AccuracyDebuff, _AccuracyDebuff);
-	//Rotation = t.Rotation();
+		FVector velocity = dir * _BulletSpeed;
+		bullet.InitialVelocity = velocity;
+		_Bullets.Add(bullet);
+	}
 }
 
-inline void AZombieWeapon::UpdateAttributes(Bullet& Bullet) {
+void AZombieWeapon::StartFiring()
+{
+	_IsFiring = true;
+
+	if (_Automatic) {
+		//Timer call here to repeat fire method every N seconds. Where N is the time between bullets
+		GetWorld()->GetTimerManager().SetTimer(_AutoFireTimerHandle, this, &AZombieWeapon::Fire, _TimeBetweenShots, true, 0.0f);
+	}
+	else {
+		Fire();
+		EndFiring();
+	}
+}
+
+void AZombieWeapon::EndFiring()
+{
+	_IsFiring = false;
+	GetWorld()->GetTimerManager().ClearTimer(_AutoFireTimerHandle);
+}
+
+void AZombieWeapon::UpdateAttributes(Bullet& Bullet) {
 	if (Bullet.Time > _BulletLifetime) {
 		Bullet._Stop = true;
 	}
 }
 
-inline FVector AZombieWeapon::GetPosition(Bullet& Bullet) {
-	FVector gravity = FVector::DownVector * 300.0f; //300 is bullet drop
+FVector AZombieWeapon::GetPosition(Bullet& Bullet) {
+	FVector gravity = FVector::DownVector * _BulletWeight;
 
 	return Bullet.InitialPosition + (Bullet.InitialVelocity * Bullet.Time) + (0.5f * gravity * Bullet.Time * Bullet.Time);
 }
