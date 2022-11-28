@@ -120,13 +120,13 @@ void AZombieWeapon::Fire()
 
 	if (_CurrentBulletsInClip == 0) {
 		if (_DryFireSFX != nullptr) {
-			UGameplayStatics::PlaySoundAtLocation(World, _DryFireSFX, _Origin);
+			UGameplayStatics::PlaySoundAtLocation(World, _DryFireSFX, _MuzzleFlashLocation->GetComponentLocation());
 		}
 		return;
 	}
 	
 	if (_FireSFX != nullptr) {
-		UGameplayStatics::PlaySoundAtLocation(World, _FireSFX, _Origin);
+		UGameplayStatics::PlaySoundAtLocation(World, _FireSFX, _MuzzleFlashLocation->GetComponentLocation());
 	}
 
 	_CurrentBulletsInClip--;
@@ -144,7 +144,7 @@ void AZombieWeapon::Fire()
 	FVector dir = Rotation.Vector();
 	for (int i = 0; i < _ProjectileCount; ++i) {
 		Bullet bullet;
-		bullet.InitialPosition = _Origin;
+		bullet.InitialPosition = _MuzzleFlashLocation->GetComponentLocation();
 
 		dir.Y += FMath::FRandRange(-_AccuracyDebuff, _AccuracyDebuff);
 		dir.Z += FMath::FRandRange(-_AccuracyDebuff, _AccuracyDebuff);

@@ -71,12 +71,7 @@ void AZombiePlayerController::Tick(float DeltaTime)
 		FRotator CameraRotation;
 		GetActorEyesViewPoint(CameraLocation, CameraRotation);
 
-		MuzzleOffset.Set(140.0f, 0.0f, 0.0f);
-
-		//Transfrom the muzzle offset from camera space to world space
-		FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
-
-		_CurrentWeapon->SetOriginRotation(MuzzleLocation, CameraRotation);
+		_CurrentWeapon->SetRotation(CameraRotation);
 	}
 }
 
@@ -167,6 +162,11 @@ void AZombiePlayerController::StopJump()
 void AZombiePlayerController::Fire()
 {
 	if (_CurrentWeapon != nullptr) {
+		FVector CameraLocation;
+		FRotator CameraRotation;
+		GetActorEyesViewPoint(CameraLocation, CameraRotation);
+
+		_CurrentWeapon->SetRotation(CameraRotation);
 		_CurrentWeapon->StartFiring();
 	}
 }

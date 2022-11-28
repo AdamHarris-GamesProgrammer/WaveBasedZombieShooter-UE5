@@ -175,12 +175,10 @@ public:
 
 	FTimerHandle _AutoFireTimerHandle;
 
-	void SetOriginRotation(FVector Origin, FRotator Rotation) {
-		_Origin = Origin;
+	void SetRotation(FRotator Rotation) {
 		_Rotation = Rotation;
 	}
 
-	FVector _Origin;
 	FRotator _Rotation;
 
 	struct Bullet {
