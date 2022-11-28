@@ -37,9 +37,6 @@ void AZombieEnemy::BeginPlay()
 	if (_pZombieAIController) {
 		_pZombieAIController->GetPathFollowingComponent()->OnRequestFinished.AddUObject(this, &AZombieEnemy::OnAIMoveCompleted);
 	}
-	else {
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Failed to cast Zombie Controller!"));
-	}
 
 	if (_pPlayerAttackCollisionDetection != nullptr) {
 		_pPlayerAttackCollisionDetection->OnComponentBeginOverlap.AddDynamic(this, &AZombieEnemy::OnPlayerAttackOverlapBegin);
@@ -80,10 +77,7 @@ void AZombieEnemy::AttackAnimationEnded()
 void AZombieEnemy::OnAIMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)
 {
 	if (IsDead) return;
-	if (!PlayerDetected) {
-		_pZombieAIController->RandomPatrol();
-	}
-	else if (PlayerDetected && CanAttackPlayer) {
+	if (CanAttackPlayer) {
 		StopSeekingPlayer();
 
 		AttackPlayer();
@@ -113,31 +107,6 @@ void AZombieEnemy::StopSeekingPlayer()
 {
 	if (IsDead) return;
 	GetWorld()->GetTimerManager().ClearTimer(_seekPlayerTimerHandle);
-}
-
-void AZombieEnemy::OnPlayerDetectedOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	if (IsDead) return;
-	AZombiePlayerController* pc = Cast<AZombiePlayerController>(OtherActor);
-	if (pc) {
-		_pPlayerRef = pc;
-		PlayerDetected = true;
-		SeekPlayer();
-	}
-}
-
-void AZombieEnemy::OnPlayerDetectedOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-	if (IsDead) return;
-
-	AZombiePlayerController* pc = Cast<AZombiePlayerController>(OtherActor);
-	if (pc) {
-		_pPlayerRef = pc;
-		PlayerDetected = false;
-		StopSeekingPlayer();
-		_pZombieAIController->RandomPatrol();
-
-	}
 }
 
 void AZombieEnemy::OnPlayerAttackOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -186,6 +155,11 @@ float AZombieEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AC
 	if (DamageEvent.IsOfType(1)) {
 		const FPointDamageEvent* e = static_cast<const FPointDamageEvent*>(&DamageEvent);
 
+		if (_BloodVFX != nullptr) {
+			FRotator EmmiterRot = e->HitInfo.ImpactNormal.Rotation();
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), _BloodVFX, e->HitInfo.Location, EmmiterRot);
+		}
+
 		float z = e->HitInfo.ImpactPoint.Z;
 
 		float capsuleHeight = GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
@@ -207,7 +181,7 @@ float AZombieEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AC
 			scale += percent;
 		}
 
-		UE_LOG(LogTemp, Warning, TEXT("Damage Scale: %f"), scale);
+		//UE_LOG(LogTemp, Warning, TEXT("Damage Scale: %f"), scale);
 
 		dam *= scale;
 	}
@@ -240,8 +214,6 @@ float AZombieEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AC
 void AZombieEnemy::AttackPlayer()
 {
 	if (!CanAttackPlayer || _pPlayerRef == nullptr) return;
-
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Playing Anim"));
 
 	_pAnimInstance->Montage_Play(_pEnemyAttackMontage);
 }

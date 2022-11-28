@@ -36,52 +36,16 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	bool PlayerDetected;
-	bool IsDead = false;
-	bool CanAttackPlayer;
-
-	UPROPERTY(BlueprintReadWrite)
-	bool CanDealDamage;
-
-	UPROPERTY(EditAnywhere)
-	UAnimMontage* _pEnemyAttackMontage;
-
-	UAnimInstance* _pAnimInstance;
-
-	class AZombieWindow* _NearbyWindow = nullptr;
-
 	void SetNearbyWindow(class AZombieWindow* Window) { _NearbyWindow = Window; }
 
 	UFUNCTION(BlueprintCallable)
 	void AttackAnimationEnded();
-
-	class AZombiePlayerController* _pPlayerRef;
-
-	UPROPERTY(EditAnywhere)
-	USphereComponent* _pPlayerAttackCollisionDetection;
-
-	UPROPERTY(EditAnywhere)
-	UBoxComponent* _pDamageCollisionDetection;
-
-	AZombieAIController* _pZombieAIController;
 
 	int GetKillPoints() const {
 		return _KillPoints;
 	}
 
 	void OnAIMoveCompleted(struct FAIRequestID RequestID, const struct FPathFollowingResult& Result);
-
-	UPROPERTY()
-	float _stoppingDistance = 100.0f;
-
-	UPROPERTY(EditDefaultsOnly)
-	int _KillPoints = 30;
-
-	FTimerHandle _seekPlayerTimerHandle;
-
-	UPROPERTY(VisibleAnywhere)
-	float _maxHealth = 20.0f;
-	float _currentHealth;
 
 	UFUNCTION()
 	void MoveToPlayer();
@@ -91,14 +55,6 @@ public:
 
 	UFUNCTION()
 	void StopSeekingPlayer();
-
-	UFUNCTION()
-	void OnPlayerDetectedOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, 
-		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
-	UFUNCTION()
-	void OnPlayerDetectedOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	UFUNCTION()
 	void OnPlayerAttackOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
@@ -116,4 +72,43 @@ public:
 	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 	void AttackPlayer();
+
+protected:
+	UPROPERTY()
+		float _stoppingDistance = 100.0f;
+
+	UPROPERTY(EditDefaultsOnly)
+		int _KillPoints = 30;
+
+	FTimerHandle _seekPlayerTimerHandle;
+
+	UPROPERTY(VisibleAnywhere)
+		float _maxHealth = 20.0f;
+	float _currentHealth;
+
+	UPROPERTY(EditDefaultsOnly)
+	UNiagaraSystem* _BloodVFX;
+
+	class AZombiePlayerController* _pPlayerRef;
+
+	UPROPERTY(EditAnywhere)
+		USphereComponent* _pPlayerAttackCollisionDetection;
+
+	UPROPERTY(EditAnywhere)
+		UBoxComponent* _pDamageCollisionDetection;
+
+	AZombieAIController* _pZombieAIController;
+
+	bool IsDead = false;
+	bool CanAttackPlayer;
+
+	UPROPERTY(BlueprintReadWrite)
+		bool CanDealDamage;
+
+	UPROPERTY(EditAnywhere)
+		UAnimMontage* _pEnemyAttackMontage;
+
+	UAnimInstance* _pAnimInstance;
+
+	class AZombieWindow* _NearbyWindow = nullptr;
 };

@@ -9,12 +9,27 @@
 #include "NiagaraFunctionLibrary.h"
 #include "ZombieWeapon.generated.h"
 
+struct Bullet {
+	FVector InitialPosition = FVector();
+	FVector InitialVelocity = FVector();
+
+	float Time = 0.00f;
+
+	bool _Stop = false;
+
+	bool CastSegment(UWorld* World, FHitResult& Hit, FVector Start, FVector End) {
+		if (_Stop) return false;
+
+		return World->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility);
+	}
+};
+
 UCLASS()
 class BTECZOMBIES_API AZombieWeapon : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	AZombieWeapon();
 
@@ -24,33 +39,15 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	void StartReload();
 	void FinishReload();
 
-	bool _isReloading = false;
-
-
-
-	FTimerHandle _ReloadTimerHandle;
-
-	UPROPERTY(EditDefaultsOnly)
-	float _Damage = 10.0f;
-
-	UPROPERTY(EditDefaultsOnly)
-	float _Range = 1500.0f;
-
-	UPROPERTY(EditDefaultsOnly)
-	int _ClipSize = 14;
-
-	UPROPERTY(EditDefaultsOnly)
-	float _ReloadDuration = 2.5f;
-
 	UFUNCTION(BlueprintCallable)
-	float GetReloadTimeRemaining() const {
+		float GetReloadTimeRemaining() const {
 		if (!_isReloading) return 0.0f;
 
 		return GetWorld()->GetTimerManager().GetTimerRemaining(_ReloadTimerHandle);
@@ -65,13 +62,13 @@ public:
 	}
 
 	UFUNCTION(BlueprintCallable)
-	FString GetAmmoText() {
+		FString GetAmmoText() {
 		FString val = FString::FromInt(_CurrentBulletsInClip) + "/" + FString::FromInt(_ClipSize);
 		return val;
 	}
 
 	UFUNCTION(BlueprintCallable)
-	float GetReloadPercentage() {
+		float GetReloadPercentage() {
 		if (!_isReloading) return 0.0f;
 
 		float timeRemaining = GetReloadTimeRemaining();
@@ -80,7 +77,7 @@ public:
 	}
 
 	UFUNCTION(BlueprintCallable)
-	bool IsReloading() {
+		bool IsReloading() {
 		return _isReloading;
 	}
 
@@ -89,7 +86,7 @@ public:
 	}
 
 	UFUNCTION(BlueprintCallable)
-	float GetReloadDuration() {
+		float GetReloadDuration() {
 		return _ReloadDuration;
 	}
 
@@ -103,16 +100,37 @@ public:
 	void Fire();
 	void EndFiring();
 
+	void SetRotation(FRotator Rotation) {
+		_Rotation = Rotation;
+	}
+	void UpdateAttributes(Bullet& Bullet);
+
+	FVector GetPosition(Bullet& Bullet);
+
+protected:
+	bool _isReloading = false;
+
+	FTimerHandle _ReloadTimerHandle;
+
 	AController* _OwningController;
+
+	int _CurrentShootPatternIndex = 0;
+
+	int _CurrentBulletsInClip;
+
+	float _AccuracyDebuff;
+
+	FTimerHandle _AutoFireTimerHandle;
+	FRotator _Rotation;
+	bool _IsFiring = false;
+
+	TArray<Bullet> _Bullets;
 
 	UPROPERTY(EditDefaultsOnly)
 	float _WeaponDamage = 10.0f;
 
 	UPROPERTY(EditDefaultsOnly)
 	UNiagaraSystem* _MuzzleVFX;
-
-	UPROPERTY(EditDefaultsOnly)
-	UNiagaraSystem* _BloodVFX;
 
 	UPROPERTY(EditDefaultsOnly)
 	UNiagaraSystem* _WallImpactVFX;
@@ -138,20 +156,14 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	USceneComponent* _MuzzleFlashLocation;
 
-	int _CurrentBulletsInClip;
-
 	UPROPERTY(EditDefaultsOnly)
 	float _Accuracy = 0.95f;
-
-	float _AccuracyDebuff;
 
 	UPROPERTY(EditDefaultsOnly)
 	float _RecoilStrength = 1.0f;
 
 	UPROPERTY(EditDefaultsOnly)
 	TArray<FVector> _ShootingPattern;
-
-	int _CurrentShootPatternIndex = 0;
 
 	UPROPERTY(EditDefaultsOnly)
 	float _BulletWeight = 100.0f;
@@ -168,37 +180,18 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	bool _Automatic = false;
 
-	bool _IsFiring = false;
-
 	UPROPERTY(EditDefaultsOnly)
 	float _TimeBetweenShots = 0.3f;
 
-	FTimerHandle _AutoFireTimerHandle;
+	UPROPERTY(EditDefaultsOnly)
+	float _Damage = 10.0f;
 
-	void SetRotation(FRotator Rotation) {
-		_Rotation = Rotation;
-	}
+	UPROPERTY(EditDefaultsOnly)
+	float _Range = 1500.0f;
 
-	FRotator _Rotation;
+	UPROPERTY(EditDefaultsOnly)
+	int _ClipSize = 14;
 
-	struct Bullet {
-		FVector InitialPosition = FVector();
-		FVector InitialVelocity = FVector();
-
-		float Time = 0.00f;
-
-		bool _Stop = false;
-
-		bool CastSegment(UWorld* World, FHitResult& Hit, FVector Start, FVector End) {
-			if (_Stop) return false;
-
-			return World->LineTraceSingleByChannel(Hit, Start, End,ECC_Visibility);
-		}
-	};
-
-	void UpdateAttributes(Bullet& Bullet);
-
-	FVector GetPosition(Bullet& Bullet);
-
-	TArray<Bullet> _Bullets;
+	UPROPERTY(EditDefaultsOnly)
+	float _ReloadDuration = 2.5f;
 };

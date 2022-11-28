@@ -69,11 +69,6 @@ void AZombieWeapon::Tick(float DeltaTime)
 			FPointDamageEvent e(_WeaponDamage, hit, hit.ImpactNormal, nullptr);
 
 			hit.GetActor()->TakeDamage(_WeaponDamage, e, _OwningController, this);
-
-			if (_BloodVFX != nullptr) {
-				FRotator EmmiterRot = hit.ImpactNormal.Rotation();
-				UNiagaraFunctionLibrary::SpawnSystemAtLocation(World, _BloodVFX, hit.Location, EmmiterRot);
-			}
 		}
 
 		UpdateAttributes(_Bullets[i]);

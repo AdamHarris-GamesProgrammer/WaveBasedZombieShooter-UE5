@@ -20,6 +20,8 @@ public:
 	void BeginPlay() override;
 
 
+public:
+	void PathToPlayer();
 
 private:
 	class UNavigationSystemV1* _pNavArea;
@@ -28,10 +30,4 @@ private:
 
 	FTimerHandle _SeekPlayerTimerHandle;
 
-public:
-	UFUNCTION()
-	void RandomPatrol();
-
-
-	void PathToPlayer();
 };

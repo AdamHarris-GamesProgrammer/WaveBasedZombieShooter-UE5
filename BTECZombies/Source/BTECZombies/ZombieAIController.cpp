@@ -13,29 +13,6 @@ void AZombieAIController::BeginPlay()
 	_pNavArea = FNavigationSystem::GetCurrent<UNavigationSystemV1>(this);
 
 	GetWorld()->GetTimerManager().SetTimer(_SeekPlayerTimerHandle, this, &AZombieAIController::PathToPlayer, 1.0f, true, 0.0f);
-
-	
-
-	//MaxWalkSpeed = 100.0f;
-	//RandomPatrol();
-}
-
-void AZombieAIController::RandomPatrol()
-{
-	//TODO: REMOVE THIS LATER (Just Testing player pathing)
-	PathToPlayer();
-	return;
-
-	//const FVector& Origin, float Radius, FNavLocation& ResultLocation, ANavigationData* NavData, FSharedConstNavQueryFilter QueryFilter
-	AZombieEnemy* e = Cast<AZombieEnemy>(GetPawn());
-	if (e && !e->IsDead) {
-		if (_pNavArea) {
-			if (_pNavArea->GetRandomReachablePointInRadius(GetPawn()->GetActorLocation(), 10000.0f, _randomLocation)) {
-				MoveToLocation(_randomLocation.Location);
-			}
-
-		}
-	}
 }
 
 void AZombieAIController::PathToPlayer()
