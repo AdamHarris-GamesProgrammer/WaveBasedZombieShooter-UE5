@@ -5,17 +5,34 @@
 #include "ZombiePlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "ZombieEnemy.h"
+#include "ZombieSpawnPoint.h"
 #include "ZombieMainPlayerController.h"
+#include "RoomVolume.h"
 
 void ABTECZombiesGameModeBase::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
 	Super::InitGame(MapName, Options, ErrorMessage);
 
-	TArray<AActor*> FoundActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AZombieSpawnPoint::StaticClass(), FoundActors);
-	for (int i = 0; i < FoundActors.Num(); ++i) {
-		_SpawnPoints.Add(Cast<AZombieSpawnPoint>(FoundActors[i]));
+	UWorld* World = GetWorld();
+
+	TArray<AActor*> rooms;
+	UGameplayStatics::GetAllActorsOfClass(World, ARoomVolume::StaticClass(), rooms);
+
+	for (int i = 0; i < rooms.Num(); ++i) {
+		ARoomVolume* r = Cast <ARoomVolume>(rooms[i]);
+		r->LoadStartAttributes();
 	}
+
+	for (int i = 0; i < rooms.Num(); ++i) {
+		ARoomVolume* r = Cast <ARoomVolume>(rooms[i]);
+		r->LoadEndAttributes();
+	}
+
+	//TArray<AActor*> FoundActors;
+	//UGameplayStatics::GetAllActorsOfClass(GetWorld(), AZombieSpawnPoint::StaticClass(), FoundActors);
+	//for (int i = 0; i < FoundActors.Num(); ++i) {
+	//	_SpawnPoints.Add(Cast<AZombieSpawnPoint>(FoundActors[i]));
+	//}
 	GetWorld()->GetTimerManager().SetTimer(_zombieSpawnTimerHandle, this, &ABTECZombiesGameModeBase::SpawnEnemy, 2.0f, true, 1.0f);
 }
 
@@ -81,4 +98,9 @@ void ABTECZombiesGameModeBase::PlayerKilled(AZombiePlayerController* KilledPlaye
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("Player Controller not found"));
 	}
+}
+
+void ABTECZombiesGameModeBase::AddActiveSpawnPoint(AZombieSpawnPoint* Spawn)
+{
+	_SpawnPoints.Add(Spawn);
 }

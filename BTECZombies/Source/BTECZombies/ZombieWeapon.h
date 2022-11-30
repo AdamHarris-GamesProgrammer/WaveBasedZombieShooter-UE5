@@ -4,9 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Particles/ParticleSystem.h"
-#include "NiagaraComponent.h"
-#include "NiagaraFunctionLibrary.h"
+
 #include "ZombieWeapon.generated.h"
 
 struct Bullet {
@@ -130,28 +128,28 @@ protected:
 	float _WeaponDamage = 10.0f;
 
 	UPROPERTY(EditDefaultsOnly)
-	UNiagaraSystem* _MuzzleVFX;
+	class UNiagaraSystem* _MuzzleVFX;
 
 	UPROPERTY(EditDefaultsOnly)
-	UNiagaraSystem* _WallImpactVFX;
+	class UNiagaraSystem* _WallImpactVFX;
 
 	UPROPERTY(EditDefaultsOnly)
-	UNiagaraSystem* _BulletTrailVFX;
+	class UNiagaraSystem* _BulletTrailVFX;
 
 	UPROPERTY(EditDefaultsOnly)
-	USkeletalMeshComponent* _Mesh;
+	class USkeletalMeshComponent* _Mesh;
 
 	UPROPERTY(EditDefaultsOnly, Category = SFX)
-	USoundBase* _FireSFX;
+	class USoundBase* _FireSFX;
 
 	UPROPERTY(EditDefaultsOnly, Category = SFX)
-	USoundBase* _DryFireSFX;
+	class USoundBase* _DryFireSFX;
 
 	UPROPERTY(EditDefaultsOnly, Category = SFX)
-	USoundBase* _StartReloadSFX;
+	class USoundBase* _StartReloadSFX;
 
 	UPROPERTY(EditDefaultsOnly, Category = SFX)
-	USoundBase* _EndReloadSFX;
+	class USoundBase* _EndReloadSFX;
 
 	UPROPERTY(EditDefaultsOnly)
 	USceneComponent* _MuzzleFlashLocation;

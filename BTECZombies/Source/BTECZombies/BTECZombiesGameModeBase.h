@@ -6,7 +6,6 @@
 #include "GameFramework/GameModeBase.h"
 #include "ZombieEnemy.h"
 #include "Blueprint/UserWidget.h"
-#include "ZombieSpawnPoint.h"
 #include "BTECZombiesGameModeBase.generated.h"
 
 /**
@@ -16,7 +15,6 @@ UCLASS()
 class BTECZOMBIES_API ABTECZombiesGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
 
 public:
 	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
@@ -49,6 +47,8 @@ public:
 		//UE_LOG(LogTemp, Warning, TEXT("Remaining Points: %i"), _CurrentPoints);
 	}
 
+	void AddActiveSpawnPoint(class AZombieSpawnPoint* Spawn);
+
 protected:
 	UPROPERTY(EditAnywhere, Category = UI)
 	TSubclassOf<UUserWidget> _StartingWidgetClass;
@@ -56,7 +56,8 @@ protected:
 	UPROPERTY()
 	UUserWidget* _CurrentWidget;
 
-	TArray<AZombieSpawnPoint*> _SpawnPoints;
+	TArray<class AZombieSpawnPoint*> _SpawnPoints;
+
 
 private:
 	int _CurrentPoints = 0;

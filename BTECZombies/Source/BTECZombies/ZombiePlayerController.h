@@ -5,10 +5,6 @@
 #include "CoreMinimal.h"
 
 #include "GameFramework/Character.h"
-#include "Camera/CameraComponent.h"
-#include "Components/CapsuleComponent.h"
-#include "WeaponSpawnPoint.h"
-
 #include "GameFramework/PlayerController.h"
 
 #include "ZombieWeapon.h"
@@ -118,7 +114,7 @@ public:
 		return timeRemaining / _CurrentWeapon->GetReloadDuration();
 	}
 
-	void SetNearbyPickupWeapon(AWeaponSpawnPoint* SpawnPoint) {
+	void SetNearbyPickupWeapon(class AWeaponSpawnPoint* SpawnPoint) {
 		_NearbyWeaponToPickup = SpawnPoint;
 	}
 
@@ -126,10 +122,10 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere)
-	UCameraComponent* _pCameraComponent;
+	class UCameraComponent* _pCameraComponent;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-	USkeletalMeshComponent* _pFPSMesh;
+	class USkeletalMeshComponent* _pFPSMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	FVector MuzzleOffset;
@@ -140,12 +136,12 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	float _maxHealth = 100.0f;
 
-	AZombieWeapon* _PrimaryWeapon;
-	AZombieWeapon* _SecondaryWeapon;
+	class AZombieWeapon* _PrimaryWeapon;
+	class AZombieWeapon* _SecondaryWeapon;
 
-	AZombieWeapon* _CurrentWeapon;
+	class AZombieWeapon* _CurrentWeapon;
 
-	AWeaponSpawnPoint* _NearbyWeaponToPickup;
+	class AWeaponSpawnPoint* _NearbyWeaponToPickup;
 
 	class AZombieWindow* _NearbyWindow = nullptr;
 	class AZombieDoor* _NearbyDoor = nullptr;

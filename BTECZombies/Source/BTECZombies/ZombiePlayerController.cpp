@@ -6,6 +6,8 @@
 
 #include "ZombieWindow.h"
 #include "ZombieDoor.h"
+#include "WeaponSpawnPoint.h"
+#include "Components/CapsuleComponent.h"
 #include "BTECZombiesGameModeBase.h"
 
 // Sets default values

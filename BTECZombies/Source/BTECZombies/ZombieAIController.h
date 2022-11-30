@@ -4,8 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "NavigationSystem.h"
-#include "AI/Navigation/NavigationTypes.h"
+
 #include "ZombieAIController.generated.h"
 
 /**

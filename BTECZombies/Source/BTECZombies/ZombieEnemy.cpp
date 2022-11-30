@@ -6,7 +6,16 @@
 #include "ZombieWindow.h"
 #include "BTECZombiesGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/BoxComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "Components/SphereComponent.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "Animation/AnimInstance.h"
+#include "Animation/AnimMontage.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "ZombiePlayerController.h"
+#include "ZombieAIController.h"
 
 // Sets default values
 AZombieEnemy::AZombieEnemy()

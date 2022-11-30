@@ -4,15 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "ZombiePlayerController.h"
-#include "Components/BoxComponent.h"
-#include "Components/SphereComponent.h"
-#include "NiagaraComponent.h"
-#include "NiagaraFunctionLibrary.h"
-#include "ZombieAIController.h"
 
-#include "Animation/AnimInstance.h"
-#include "Animation/AnimMontage.h"
 
 #include "ZombieEnemy.generated.h"
 
@@ -87,17 +79,17 @@ protected:
 	float _currentHealth;
 
 	UPROPERTY(EditDefaultsOnly)
-	UNiagaraSystem* _BloodVFX;
+	class UNiagaraSystem* _BloodVFX;
 
 	class AZombiePlayerController* _pPlayerRef;
 
 	UPROPERTY(EditAnywhere)
-		USphereComponent* _pPlayerAttackCollisionDetection;
+		class USphereComponent* _pPlayerAttackCollisionDetection;
 
 	UPROPERTY(EditAnywhere)
-		UBoxComponent* _pDamageCollisionDetection;
+		class UBoxComponent* _pDamageCollisionDetection;
 
-	AZombieAIController* _pZombieAIController;
+	class AZombieAIController* _pZombieAIController;
 
 	bool IsDead = false;
 	bool CanAttackPlayer;
@@ -106,9 +98,9 @@ protected:
 		bool CanDealDamage;
 
 	UPROPERTY(EditAnywhere)
-		UAnimMontage* _pEnemyAttackMontage;
+		class UAnimMontage* _pEnemyAttackMontage;
 
-	UAnimInstance* _pAnimInstance;
+	class UAnimInstance* _pAnimInstance;
 
 	class AZombieWindow* _NearbyWindow = nullptr;
 };

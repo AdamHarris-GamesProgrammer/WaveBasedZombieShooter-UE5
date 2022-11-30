@@ -16,17 +16,19 @@ public:
 	// Sets default values for this actor's properties
 	AZombieSpawnPoint();
 
+	void ActivateSpawn();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<AZombieEnemy>> _EnemyVarities;
 
 	void SpawnEnemy();
+
+private:
+	bool _SpawnPointActive = false;
 
 };

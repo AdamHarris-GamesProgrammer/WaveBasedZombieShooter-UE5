@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Components/BoxComponent.h"
+#include "ZombieSpawnPoint.h"
 #include "ZombieWindow.generated.h"
 
 UCLASS()
@@ -28,6 +28,8 @@ public:
 	bool IsBlocked() const {
 		return _isBlocked;
 	}
+
+	void ActivateWindow();
 
 	void RemoveZombie(class AZombieEnemy* Zombie);
 
@@ -60,22 +62,22 @@ protected:
 	TArray<class AZombieEnemy*> _ZombiesInCollider;
 
 	UPROPERTY(EditDefaultsOnly)
-		UStaticMeshComponent* _Mesh;
+		class UStaticMeshComponent* _Mesh;
 
 	UPROPERTY(EditDefaultsOnly)
-		UStaticMeshComponent* _BoardMesh;
+		class UStaticMeshComponent* _BoardMesh;
 
 	UPROPERTY(EditDefaultsOnly)
-		USceneComponent* _OutsidePoint;
+		class USceneComponent* _OutsidePoint;
 
 	UPROPERTY(EditDefaultsOnly)
-		USceneComponent* _InsidePoint;
+		class USceneComponent* _InsidePoint;
 
 	UPROPERTY(EditDefaultsOnly)
-		UBoxComponent* _OutsideCollider;
+		class UBoxComponent* _OutsideCollider;
 
 	UPROPERTY(EditDefaultsOnly)
-		UBoxComponent* _InsideCollider;
+		class UBoxComponent* _InsideCollider;
 
 	UPROPERTY(EditDefaultsOnly)
 		float _TeardownTime = 2.5f;
@@ -83,8 +85,13 @@ protected:
 	UPROPERTY(EditAnywhere)
 		int _BlockCost = 500;
 
+	UPROPERTY(EditAnywhere)
+	TArray<AZombieSpawnPoint*> _ConnectedSpawnPoints;
+
 private:
 	bool _isBlocked = false;
+
+	bool _IsActivated = false;
 
 	float _TeardownTimer = 0.0f;
 };

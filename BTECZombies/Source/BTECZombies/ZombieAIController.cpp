@@ -1,9 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "ZombieEnemy.h"
 
 #include "ZombieAIController.h"
+
+#include "ZombieEnemy.h"
 #include "GameFramework/Character.h"
+#include "NavigationSystem.h"
+#include "AI/Navigation/NavigationTypes.h"
 #include <Kismet/GameplayStatics.h>
 
 void AZombieAIController::BeginPlay()

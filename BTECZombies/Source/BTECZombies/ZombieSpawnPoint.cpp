@@ -1,32 +1,37 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "ZombieAIController.h"
 #include "ZombieSpawnPoint.h"
+#include "BTECZombiesGameModeBase.h"
 
 // Sets default values
 AZombieSpawnPoint::AZombieSpawnPoint()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
+}
 
+void AZombieSpawnPoint::ActivateSpawn()
+{
+	if (_SpawnPointActive) return;
+
+	ABTECZombiesGameModeBase* gm = Cast< ABTECZombiesGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (gm) {
+		gm->AddActiveSpawnPoint(this);
+	}
+	_SpawnPointActive = true;
 }
 
 // Called when the game starts or when spawned
 void AZombieSpawnPoint::BeginPlay()
 {
 	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void AZombieSpawnPoint::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 void AZombieSpawnPoint::SpawnEnemy()
 {
+	if (!_SpawnPointActive) return;
+
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
 	SpawnParams.Instigator = GetInstigator();

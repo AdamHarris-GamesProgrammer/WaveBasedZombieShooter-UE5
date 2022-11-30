@@ -27,19 +27,13 @@ public:
 		return _IsOpened;
 	}
 
-	void OpenDoor() {
-		UE_LOG(LogTemp, Warning, TEXT("Opening Door"));
+	void OpenDoor();
 
-		_IsOpened = true;
+	class ARoomVolume* GetClosestRoom(const FVector Input);
+	class ARoomVolume* GetOppositeRoom(const FVector Input);
+	USceneComponent* GetClosestRoomCheck(const FVector Input);
 
-		_Door->SetCanEverAffectNavigation(false);
-
-		FRotator rot = _Door->GetRelativeRotation();
-
-		rot.Yaw += 90.0f;
-
-		_Door->SetRelativeRotation(rot);
-	}
+	void SetRoom(USceneComponent* ClosestCheck, class ARoomVolume* InputRoom);
 
 protected:
 	// Called when the game starts or when spawned
@@ -62,6 +56,16 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	class UBoxComponent* _DoorTriggerVolume;
+
+
+	UPROPERTY(EditDefaultsOnly)
+	USceneComponent* _RoomACheck;
+
+	UPROPERTY(EditDefaultsOnly)
+	USceneComponent* _RoomBCheck;
+
+	class ARoomVolume* _RoomA;
+	class ARoomVolume* _RoomB;
 
 	UPROPERTY(EditAnywhere)
 	int _CostToOpen = 500;

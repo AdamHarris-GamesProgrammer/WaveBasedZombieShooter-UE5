@@ -2,6 +2,9 @@
 
 
 #include "ZombieWindow.h"
+#include "Components/BoxComponent.h"
+#include "ZombiePlayerController.h"
+#include "ZombieSpawnPoint.h"
 #include "ZombieEnemy.h"
 
 // Sets default values
@@ -72,6 +75,14 @@ void AZombieWindow::BoardUpWindow()
 	_BoardMesh->SetVisibility(true);
 	_isBlocked = true;
 
+}
+
+void AZombieWindow::ActivateWindow() {
+	_IsActivated = true;
+
+	for (int i = 0; i < _ConnectedSpawnPoints.Num(); ++i) {
+		_ConnectedSpawnPoints[i]->ActivateSpawn();
+	}
 }
 
 void AZombieWindow::RemoveZombie(AZombieEnemy* Zombie)
