@@ -30,15 +30,22 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	void ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass);
 
-
 	void EnemyKilled(class AZombieEnemy* KilledEnemy);
 
 	void PlayerKilled(class AZombiePlayerController* KilledPlayer);
 
-	FName _CurrentLevelName;
+	UFUNCTION(BlueprintCallable)
+	int GetCurrentPoints() const {
+		return _CurrentPoints;
+	}
 
-	FTimerHandle _zombieSpawnTimerHandle;
+	void SpendPoints(int Amount) {
+		//UE_LOG(LogTemp, Warning, TEXT("Amount to Spend: %i"), Amount);
+		_CurrentPoints -= Amount;
+		//UE_LOG(LogTemp, Warning, TEXT("Remaining Points: %i"), _CurrentPoints);
+	}
 
+protected:
 	UPROPERTY(EditAnywhere, Category = UI)
 	TSubclassOf<UUserWidget> _StartingWidgetClass;
 
@@ -47,17 +54,10 @@ public:
 
 	TArray<AZombieSpawnPoint*> _SpawnPoints;
 
-	UFUNCTION(BlueprintCallable)
-	int GetCurrentPoints() const {
-		return _CurrentPoints;
-	}
-
-	void SpendPoints(int Amount) {
-		_CurrentPoints -= Amount;
-	}
-
+private:
 	int _CurrentPoints;
-
 	int _Highscore;
 
+	FName _CurrentLevelName;
+	FTimerHandle _zombieSpawnTimerHandle;
 };

@@ -25,19 +25,32 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-		void OnPlayerOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+	void OnPlayerOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 			UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
-		void OnPlayerOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+	void OnPlayerOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 			UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<AZombieWeapon> _WeaponToSpawn;
 
 	TSubclassOf<AZombieWeapon> GetWeaponToSpawn() {
 		return _WeaponToSpawn;
 	}
+
+	void DespawnMesh();
+
+	bool CanAfford(int Money);
+
+	int GetPickupCost() const {
+		return _PickupCost;
+	}
+
+protected:
+	UPROPERTY(EditAnywhere, Category = Pickup)
+	int _PickupCost = 100;
+
+	UPROPERTY(EditAnywhere, Category = Pickup)
+	TSubclassOf<AZombieWeapon> _WeaponToSpawn;
 
 	UPROPERTY(EditDefaultsOnly)
 	class USphereComponent* _SphereCollider;

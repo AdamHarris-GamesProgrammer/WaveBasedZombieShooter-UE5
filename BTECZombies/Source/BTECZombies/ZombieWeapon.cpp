@@ -47,16 +47,16 @@ void AZombieWeapon::Tick(float DeltaTime)
 
 		FVector p1 = GetPosition(_Bullets[i]);
 
+		//Calculate the direction of the bullet
 		FVector dir = (p0 - p1);
 		dir.Normalize();
 
-		
-
-		DrawDebugLine(GetWorld(), p0, p1, FColor::Red, false, 5.0f, 0U, 1.0f);
-
 		if (_BulletTrailVFX != nullptr) {
+			//Spawn our bullet trail vfx
 			UNiagaraFunctionLibrary::SpawnSystemAtLocation(World, _BulletTrailVFX, p0, dir.Rotation());
 		}
+		
+		//DrawDebugLine(GetWorld(), p0, p1, FColor::Red, false, 5.0f, 0U, 1.0f);
 
 		if (_Bullets[i].CastSegment(World, hit, p0, p1)) {
 			if (hit.GetActor() == nullptr) continue;
@@ -66,19 +66,17 @@ void AZombieWeapon::Tick(float DeltaTime)
 			AZombieEnemy* enemy = Cast<AZombieEnemy>(hit.GetActor());
 			if (enemy == nullptr) continue;
 
-			FPointDamageEvent e(_WeaponDamage, hit, hit.ImpactNormal, nullptr);
-
-			hit.GetActor()->TakeDamage(_WeaponDamage, e, _OwningController, this);
+			FPointDamageEvent damageEvent(_WeaponDamage, hit, hit.ImpactNormal, nullptr);
+			hit.GetActor()->TakeDamage(_WeaponDamage, damageEvent, _OwningController, this);
 		}
 
 		UpdateAttributes(_Bullets[i]);
 	}
 
+	//Removes all spent bullets
 	_Bullets.RemoveAll([](Bullet bul) {
 		return bul._Stop;
 	});
-
-	//UE_LOG(LogTemp, Warning, TEXT("Bullet Arr Size: %i"), _Bullets.Num());
 }
 
 void AZombieWeapon::StartReload()

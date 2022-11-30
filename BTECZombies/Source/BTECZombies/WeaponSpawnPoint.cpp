@@ -52,3 +52,15 @@ void AWeaponSpawnPoint::OnPlayerOverlapEnd(UPrimitiveComponent* OverlappedComp, 
 		pc->SetNearbyPickupWeapon(nullptr);
 	}
 }
+
+void AWeaponSpawnPoint::DespawnMesh()
+{
+	if (_Weapon != nullptr) {
+		GetWorld()->DestroyActor(_Weapon);
+	}
+}
+
+bool AWeaponSpawnPoint::CanAfford(int Money)
+{
+	return Money > _PickupCost;
+}

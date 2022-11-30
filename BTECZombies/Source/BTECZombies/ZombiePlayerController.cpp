@@ -193,11 +193,19 @@ void AZombiePlayerController::Interact()
 	if (_NearbyWeaponToPickup) {
 		//TODO: Can afford to pickup
 
-		AZombieWeapon* weapon = GetWorld()->SpawnActor<AZombieWeapon>(_NearbyWeaponToPickup->GetWeaponToSpawn());
-		EquipWeapon(weapon);
+		ABTECZombiesGameModeBase* gm = Cast<ABTECZombiesGameModeBase>(GetWorld()->GetAuthGameMode());
+		if (gm) {
+			if (_NearbyWeaponToPickup->CanAfford(gm->GetCurrentPoints())) {
+				AZombieWeapon* weapon = GetWorld()->SpawnActor<AZombieWeapon>(_NearbyWeaponToPickup->GetWeaponToSpawn());
+				EquipWeapon(weapon);
 
-		_NearbyWeaponToPickup->Destroy();
-		_NearbyWeaponToPickup = nullptr;
+				gm->SpendPoints(_NearbyWeaponToPickup->GetPickupCost());
+				_NearbyWeaponToPickup->DespawnMesh();
+				_NearbyWeaponToPickup->Destroy();
+				_NearbyWeaponToPickup = nullptr;
+				
+			}
+		}
 	}
 }
 
@@ -244,6 +252,11 @@ FString AZombiePlayerController::GetInteractPrompt() {
 	if (_NearbyWindow != nullptr && !_NearbyWindow->IsBlocked()) {
 		return FString(TEXT("Press E to Board Up Window: ")) + FString::FromInt(_NearbyWindow->GetPointsToOpen());
 	}
+
+	if (_NearbyWeaponToPickup != nullptr) {
+		return FString(TEXT("Press E to Pickup Weapon: ")) + FString::FromInt(_NearbyWeaponToPickup->GetPickupCost());
+	}
+
 	return FString(TEXT(""));
 }
 

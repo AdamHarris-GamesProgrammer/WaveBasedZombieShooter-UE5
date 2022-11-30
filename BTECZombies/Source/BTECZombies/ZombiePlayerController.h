@@ -116,8 +116,13 @@ public:
 		return timeRemaining / _CurrentWeapon->GetReloadDuration();
 	}
 
+	void SetNearbyPickupWeapon(AWeaponSpawnPoint* SpawnPoint) {
+		_NearbyWeaponToPickup = SpawnPoint;
+	}
+
 	void EquipWeapon(AZombieWeapon* Weapon);
 
+protected:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* _pCameraComponent;
 
@@ -130,22 +135,19 @@ public:
 	UPROPERTY(EditAnywhere, Category = Combat)
 	TSubclassOf<AZombieWeapon> _StartingWeapon;
 
+	UPROPERTY(VisibleAnywhere)
+	float _maxHealth = 100.0f;
+
 	AZombieWeapon* _PrimaryWeapon;
 	AZombieWeapon* _SecondaryWeapon;
 
 	AZombieWeapon* _CurrentWeapon;
 
-	void SetNearbyPickupWeapon(AWeaponSpawnPoint* SpawnPoint) {
-		_NearbyWeaponToPickup = SpawnPoint;
-	}
-
-
 	AWeaponSpawnPoint* _NearbyWeaponToPickup;
 
 	class AZombieWindow* _NearbyWindow = nullptr;
 
-	UPROPERTY(VisibleAnywhere)
-	float _maxHealth = 100.0f;
+
 
 	float _currentHealth;
 
