@@ -138,7 +138,5 @@ void AZombieWindow::TearDownBoard()
 		ze->SetActorLocation(_InsidePoint->GetComponentLocation());
 	}
 	_ZombiesInCollider.Empty();
-
-	//_ZombiesInCollider.Empty();
 }
 

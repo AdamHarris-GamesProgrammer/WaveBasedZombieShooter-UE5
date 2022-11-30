@@ -22,8 +22,6 @@ void ABTECZombiesGameModeBase::InitGame(const FString& MapName, const FString& O
 void ABTECZombiesGameModeBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-
 }
 
 void ABTECZombiesGameModeBase::BeginPlay()
@@ -69,6 +67,7 @@ void ABTECZombiesGameModeBase::EnemyKilled(AZombieEnemy* KilledEnemy)
 	if (KilledEnemy == nullptr) return;
 
 	_CurrentPoints += KilledEnemy->GetKillPoints();
+	UE_LOG(LogTemp, Warning, TEXT("Current Points: %i"), _CurrentPoints);
 }
 
 void ABTECZombiesGameModeBase::PlayerKilled(AZombiePlayerController* KilledPlayer)

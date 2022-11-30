@@ -10,7 +10,7 @@
 // Sets default values
 AZombiePlayerController::AZombiePlayerController()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	_pCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
@@ -25,13 +25,13 @@ AZombiePlayerController::AZombiePlayerController()
 
 	_pFPSMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FPS Mesh"));
 	check(_pFPSMesh != nullptr);
-	
+
 	//Only visible to the player controller that has possessed this character
 	_pFPSMesh->SetOnlyOwnerSee(true);
-	
+
 	//Attach the mesh to our camera component
 	_pFPSMesh->SetupAttachment(_pCameraComponent);
-	
+
 	_pFPSMesh->bCastDynamicShadow = false;
 	_pFPSMesh->CastShadow = false;
 
@@ -180,31 +180,28 @@ void AZombiePlayerController::StopFiring()
 
 void AZombiePlayerController::Interact()
 {
+	ABTECZombiesGameModeBase* gm = Cast<ABTECZombiesGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (!gm) return;
+
 	if (_NearbyWindow && !_NearbyWindow->IsBlocked()) {
-		ABTECZombiesGameModeBase* gm = Cast<ABTECZombiesGameModeBase>(GetWorld()->GetAuthGameMode());
-		if (gm) {
-			if (gm->GetCurrentPoints() >= _NearbyWindow->GetPointsToOpen()) {
-				gm->SpendPoints(_NearbyWindow->GetPointsToOpen());
-				_NearbyWindow->BoardUpWindow();
-			}
+		if (gm->CanAfford(_NearbyWindow->GetBlockCost())) {
+			gm->SpendPoints(_NearbyWindow->GetBlockCost());
+			_NearbyWindow->BoardUpWindow();
 		}
 	}
 
 	if (_NearbyWeaponToPickup) {
 		//TODO: Can afford to pickup
 
-		ABTECZombiesGameModeBase* gm = Cast<ABTECZombiesGameModeBase>(GetWorld()->GetAuthGameMode());
-		if (gm) {
-			if (_NearbyWeaponToPickup->CanAfford(gm->GetCurrentPoints())) {
-				AZombieWeapon* weapon = GetWorld()->SpawnActor<AZombieWeapon>(_NearbyWeaponToPickup->GetWeaponToSpawn());
-				EquipWeapon(weapon);
+		if (gm->CanAfford(_NearbyWeaponToPickup->GetPickupCost())) {
+			AZombieWeapon* weapon = GetWorld()->SpawnActor<AZombieWeapon>(_NearbyWeaponToPickup->GetWeaponToSpawn());
+			EquipWeapon(weapon);
 
-				gm->SpendPoints(_NearbyWeaponToPickup->GetPickupCost());
-				_NearbyWeaponToPickup->DespawnMesh();
-				_NearbyWeaponToPickup->Destroy();
-				_NearbyWeaponToPickup = nullptr;
-				
-			}
+			gm->SpendPoints(_NearbyWeaponToPickup->GetPickupCost());
+			_NearbyWeaponToPickup->DespawnMesh();
+			_NearbyWeaponToPickup->Destroy();
+			_NearbyWeaponToPickup = nullptr;
+
 		}
 	}
 }
@@ -250,7 +247,7 @@ void AZombiePlayerController::MouseWheelDown()
 
 FString AZombiePlayerController::GetInteractPrompt() {
 	if (_NearbyWindow != nullptr && !_NearbyWindow->IsBlocked()) {
-		return FString(TEXT("Press E to Board Up Window: ")) + FString::FromInt(_NearbyWindow->GetPointsToOpen());
+		return FString(TEXT("Press E to Board Up Window: ")) + FString::FromInt(_NearbyWindow->GetBlockCost());
 	}
 
 	if (_NearbyWeaponToPickup != nullptr) {

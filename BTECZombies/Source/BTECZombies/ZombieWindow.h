@@ -16,55 +16,24 @@ public:
 	// Sets default values for this actor's properties
 	AZombieWindow();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	void BoardUpWindow();
 
-	UPROPERTY(EditDefaultsOnly)
-	float _TeardownTime = 2.5f;
-
-	float _TeardownTimer = 0.0f;
-
-	UPROPERTY(EditDefaultsOnly)
-		UStaticMeshComponent* _Mesh;
-
-	UPROPERTY(EditDefaultsOnly)
-		UStaticMeshComponent* _BoardMesh;
-
-	UPROPERTY(EditDefaultsOnly)
-		USceneComponent* _OutsidePoint;
-	UPROPERTY(EditDefaultsOnly)
-		USceneComponent* _InsidePoint;
-
-	UPROPERTY(EditDefaultsOnly)
-		UBoxComponent* _OutsideCollider;
-
-	UPROPERTY(EditDefaultsOnly)
-		UBoxComponent* _InsideCollider;
-
-	UPROPERTY(EditAnywhere)
-		int _PointsToOpen = 500;
-
-	int GetPointsToOpen() const {
-		return _PointsToOpen;
+	int GetBlockCost() const {
+		return _BlockCost;
 	}
 
 	bool IsBlocked() const {
 		return _isBlocked;
 	}
 
-	UPROPERTY()
-	TArray<class AZombieEnemy*> _ZombiesInCollider;
-
-	bool _isBlocked = false;
-
 	void RemoveZombie(class AZombieEnemy* Zombie);
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
 	UFUNCTION()
 		void OnOutsideColliderOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
@@ -82,6 +51,40 @@ public:
 		void OnInsideColliderOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 			UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+
 	UFUNCTION()
-	void TearDownBoard();
+		void TearDownBoard();
+
+protected:
+	UPROPERTY()
+	TArray<class AZombieEnemy*> _ZombiesInCollider;
+
+	UPROPERTY(EditDefaultsOnly)
+		UStaticMeshComponent* _Mesh;
+
+	UPROPERTY(EditDefaultsOnly)
+		UStaticMeshComponent* _BoardMesh;
+
+	UPROPERTY(EditDefaultsOnly)
+		USceneComponent* _OutsidePoint;
+
+	UPROPERTY(EditDefaultsOnly)
+		USceneComponent* _InsidePoint;
+
+	UPROPERTY(EditDefaultsOnly)
+		UBoxComponent* _OutsideCollider;
+
+	UPROPERTY(EditDefaultsOnly)
+		UBoxComponent* _InsideCollider;
+
+	UPROPERTY(EditDefaultsOnly)
+		float _TeardownTime = 2.5f;
+
+	UPROPERTY(EditAnywhere)
+		int _BlockCost = 500;
+
+private:
+	bool _isBlocked = false;
+
+	float _TeardownTimer = 0.0f;
 };

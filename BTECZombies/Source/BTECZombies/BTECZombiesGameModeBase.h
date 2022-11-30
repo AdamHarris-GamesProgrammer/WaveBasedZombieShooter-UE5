@@ -39,6 +39,10 @@ public:
 		return _CurrentPoints;
 	}
 
+	bool CanAfford(int Amount) {
+		return Amount <= _CurrentPoints;
+	}
+
 	void SpendPoints(int Amount) {
 		//UE_LOG(LogTemp, Warning, TEXT("Amount to Spend: %i"), Amount);
 		_CurrentPoints -= Amount;
@@ -55,9 +59,9 @@ protected:
 	TArray<AZombieSpawnPoint*> _SpawnPoints;
 
 private:
-	int _CurrentPoints;
-	int _Highscore;
+	int _CurrentPoints = 0;
+	int _Highscore = 0;
 
-	FName _CurrentLevelName;
+	FName _CurrentLevelName = "";
 	FTimerHandle _zombieSpawnTimerHandle;
 };
