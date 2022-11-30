@@ -40,6 +40,8 @@ public:
 
 	void SetNearbyWindow(class AZombieWindow* window) { _NearbyWindow = window; }
 
+	void SetNearbyDoor(class AZombieDoor* Door) { _NearbyDoor = Door; }
+
 	//Handles moving forward and backward
 	UFUNCTION() //Adding UFUNCTION macro means that the engine is aware of these functions and will be included in serialization
 	void MoveForward(float value);
@@ -146,7 +148,7 @@ protected:
 	AWeaponSpawnPoint* _NearbyWeaponToPickup;
 
 	class AZombieWindow* _NearbyWindow = nullptr;
-
+	class AZombieDoor* _NearbyDoor = nullptr;
 
 
 	float _currentHealth;

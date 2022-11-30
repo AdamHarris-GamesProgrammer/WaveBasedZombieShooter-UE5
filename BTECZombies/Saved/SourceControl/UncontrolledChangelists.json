@@ -89,6 +89,8 @@
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/SFX/Weapons/gun_shotgun_shot_01.uasset",
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/SFX/Weapons/gun_shotgun_dry_fire_01.uasset",
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/SFX/Weapons/gun_shotgun_pickup_01.uasset",
+				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/BP_Door.uasset",
+				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/BP_DoorFrame.uasset",
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/UI/BP_PlayerHealthBar.uasset",
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/BP_Zombie.uasset"
 			]

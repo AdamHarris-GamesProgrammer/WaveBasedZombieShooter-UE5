@@ -5,6 +5,7 @@
 #include "Camera/CameraComponent.h"
 
 #include "ZombieWindow.h"
+#include "ZombieDoor.h"
 #include "BTECZombiesGameModeBase.h"
 
 // Sets default values
@@ -110,7 +111,7 @@ float AZombiePlayerController::TakeDamage(float Damage, FDamageEvent const& Dama
 
 	_currentHealth -= dam;
 
-	UE_LOG(LogTemp, Warning, TEXT("Player Health: %f"), _currentHealth);
+	//UE_LOG(LogTemp, Warning, TEXT("Player Health: %f"), _currentHealth);
 
 	if (_currentHealth <= 0.0f) {
 		_isDead = true;
@@ -201,7 +202,14 @@ void AZombiePlayerController::Interact()
 			_NearbyWeaponToPickup->DespawnMesh();
 			_NearbyWeaponToPickup->Destroy();
 			_NearbyWeaponToPickup = nullptr;
+		}
+	}
 
+	if (_NearbyDoor) {
+		if (gm->CanAfford(_NearbyDoor->GetCostToOpen())) {
+			_NearbyDoor->OpenDoor();
+
+			gm->SpendPoints(_NearbyDoor->GetCostToOpen());
 		}
 	}
 }
@@ -252,6 +260,10 @@ FString AZombiePlayerController::GetInteractPrompt() {
 
 	if (_NearbyWeaponToPickup != nullptr) {
 		return FString(TEXT("Press E to Pickup Weapon: ")) + FString::FromInt(_NearbyWeaponToPickup->GetPickupCost());
+	}
+
+	if (_NearbyDoor != nullptr && !_NearbyDoor->IsOpen()) {
+		return FString(TEXT("Press E to Open Door: ")) + FString::FromInt(_NearbyDoor->GetCostToOpen());
 	}
 
 	return FString(TEXT(""));
