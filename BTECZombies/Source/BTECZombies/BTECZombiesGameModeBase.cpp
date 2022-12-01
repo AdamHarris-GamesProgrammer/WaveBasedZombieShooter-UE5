@@ -27,12 +27,16 @@ void ABTECZombiesGameModeBase::InitGame(const FString& MapName, const FString& O
 		ARoomVolume* r = Cast <ARoomVolume>(rooms[i]);
 		r->LoadEndAttributes();
 	}
+		
+	for (int i = 0; i < rooms.Num(); ++i) {
+		ARoomVolume* r = Cast <ARoomVolume>(rooms[i]);
+		if (r) {
+			if (r->ActivateOnBeginPlay()) {
+				r->ActivateRoom();
+			}
+		}
+	}
 
-	//TArray<AActor*> FoundActors;
-	//UGameplayStatics::GetAllActorsOfClass(GetWorld(), AZombieSpawnPoint::StaticClass(), FoundActors);
-	//for (int i = 0; i < FoundActors.Num(); ++i) {
-	//	_SpawnPoints.Add(Cast<AZombieSpawnPoint>(FoundActors[i]));
-	//}
 	GetWorld()->GetTimerManager().SetTimer(_zombieSpawnTimerHandle, this, &ABTECZombiesGameModeBase::SpawnEnemy, 2.0f, true, 1.0f);
 }
 
