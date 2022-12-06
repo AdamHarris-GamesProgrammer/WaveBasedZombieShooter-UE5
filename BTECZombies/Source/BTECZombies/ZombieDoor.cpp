@@ -15,6 +15,7 @@ AZombieDoor::AZombieDoor()
 	PrimaryActorTick.bCanEverTick = true;
 
 	_DoorFrame = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Door Frame"));
+	_DoorFrame->SetCanEverAffectNavigation(false);
 	RootComponent = _DoorFrame;
 
 	_Door = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Door"));

@@ -59,7 +59,8 @@ void AZombieEnemy::BeginPlay()
 	_currentHealth = _maxHealth;
 	_pAnimInstance = GetMesh()->GetAnimInstance();
 
-	//_pZombieAIController->RandomPatrol();
+	int sfxIndex = FMath::RandRange(0, _ZombieSpawnSound.Num() - 1);
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), _ZombieSpawnSound[sfxIndex], GetActorLocation(), 0.1f);
 
 	IsDead = false;
 }
@@ -201,6 +202,9 @@ float AZombieEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AC
 		_pPlayerRef = nullptr;
 		//TODO: Trigger Point Gain
 
+		int sfxIndex = FMath::RandRange(0, _ZombieDeathSound.Num() - 1);
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), _ZombieDeathSound[sfxIndex], GetActorLocation(), 0.1f);
+
 		if (_NearbyWindow) {
 			_NearbyWindow->RemoveZombie(this);
 		}
@@ -223,6 +227,9 @@ float AZombieEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AC
 void AZombieEnemy::AttackPlayer()
 {
 	if (!CanAttackPlayer || _pPlayerRef == nullptr) return;
+
+	int sfxIndex = FMath::RandRange(0, _ZombieAttackSound.Num() - 1);
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), _ZombieAttackSound[sfxIndex], GetActorLocation(), 0.1f);
 
 	_pAnimInstance->Montage_Play(_pEnemyAttackMontage);
 }

@@ -89,6 +89,15 @@ protected:
 	UPROPERTY(EditAnywhere)
 		class UBoxComponent* _pDamageCollisionDetection;
 
+	UPROPERTY(EditDefaultsOnly)
+	TArray<USoundBase*> _ZombieAttackSound;
+
+	UPROPERTY(EditDefaultsOnly)
+	TArray<USoundBase*> _ZombieSpawnSound;
+
+	UPROPERTY(EditDefaultsOnly)
+	TArray<USoundBase*> _ZombieDeathSound;
+
 	class AZombieAIController* _pZombieAIController;
 
 	bool IsDead = false;
@@ -103,4 +112,6 @@ protected:
 	class UAnimInstance* _pAnimInstance;
 
 	class AZombieWindow* _NearbyWindow = nullptr;
+
+
 };

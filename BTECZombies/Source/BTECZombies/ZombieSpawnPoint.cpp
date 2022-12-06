@@ -39,7 +39,7 @@ void AZombieSpawnPoint::SpawnEnemy()
 	int index = FMath::RandRange(0, _EnemyVarities.Num() - 1);
 
 	FVector spawnPos = GetActorLocation();
-	spawnPos.Z += 200.0f;
+	spawnPos.Z += 100.0f;
 
 	AZombieEnemy* enemy = GetWorld()->SpawnActor<AZombieEnemy>(_EnemyVarities[index], spawnPos, FRotator(), SpawnParams);
 
