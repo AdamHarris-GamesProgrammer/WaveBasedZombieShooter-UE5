@@ -25,6 +25,8 @@ public:
 
 	virtual void SpawnEnemy();
 
+	void StartNewRound();
+
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	void ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass);
 
@@ -51,6 +53,15 @@ public:
 		//UE_LOG(LogTemp, Warning, TEXT("Remaining Points: %i"), _CurrentPoints);
 	}
 
+	UFUNCTION(BlueprintCallable)
+	FString GetRoundTimerText() {
+		if (!_TransitioningToNextRound) return "";
+
+		return "Round " + FString::FromInt(_CurrentRound) + " Starts in " 
+			+ FString::FromInt(FMath::RoundToInt(GetWorld()->GetTimerManager().GetTimerRemaining(_RoundTransitionTimerHandle)))
+			+ " Seconds";
+	}
+
 	void AddActiveSpawnPoint(class AZombieSpawnPoint* Spawn);
 
 protected:
@@ -64,11 +75,32 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	bool _SpendMoney = true;
+
+	UPROPERTY(EditDefaultsOnly)
+		int _CurrentRound = 1;
+
+	UPROPERTY(EditDefaultsOnly)
+		int _StartingAmountOfZombies = 5;
+
+	UPROPERTY(EditDefaultsOnly)
+		float _PercentageIncrease = 0.3f;
+
+	UPROPERTY(EditDefaultsOnly)
+	USoundBase* _RoundBeginSFX;
+
+	UPROPERTY(EditDefaultsOnly)
+	float _TimeBetweenRounds = 5.0f;
 private:
 	int _CurrentPoints = 0;
 	int _Highscore = 0;
 
+	int _RemainingZombiesAlive = 0;
+	int _RemainingZombiesToSpawn;
+
+	bool _TransitioningToNextRound = true;
 
 	FName _CurrentLevelName = "";
 	FTimerHandle _zombieSpawnTimerHandle;
+
+	FTimerHandle _RoundTransitionTimerHandle;
 };

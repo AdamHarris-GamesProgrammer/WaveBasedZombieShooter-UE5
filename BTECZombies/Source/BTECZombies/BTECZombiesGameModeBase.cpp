@@ -37,7 +37,11 @@ void ABTECZombiesGameModeBase::InitGame(const FString& MapName, const FString& O
 		}
 	}
 
-	GetWorld()->GetTimerManager().SetTimer(_zombieSpawnTimerHandle, this, &ABTECZombiesGameModeBase::SpawnEnemy, 2.0f, true, 1.0f);
+	_RemainingZombiesToSpawn = _StartingAmountOfZombies;
+
+	GetWorld()->GetTimerManager().SetTimer(_RoundTransitionTimerHandle, this, &ABTECZombiesGameModeBase::StartNewRound, _TimeBetweenRounds, false);
+
+	//GetWorld()->GetTimerManager().SetTimer(_zombieSpawnTimerHandle, this, &ABTECZombiesGameModeBase::SpawnEnemy, 2.0f, true, 1.0f);
 }
 
 void ABTECZombiesGameModeBase::Tick(float DeltaTime)
@@ -61,12 +65,38 @@ void ABTECZombiesGameModeBase::SpawnEnemy()
 {
 	if (_SpawnPoints.Num() == 0) return;
 
+	if (_RemainingZombiesToSpawn <= 0) return;
+
 	int randIndex = FMath::RandRange(0, _SpawnPoints.Num() - 1);
 
 	AZombieSpawnPoint* Spawner = _SpawnPoints[randIndex];
 	if (Spawner != nullptr) {
 		Spawner->SpawnEnemy();
 	}
+
+	_RemainingZombiesToSpawn--;
+	_RemainingZombiesAlive++;
+}
+
+void ABTECZombiesGameModeBase::StartNewRound()
+{
+	if (_RoundBeginSFX) {
+		UGameplayStatics::PlaySound2D(GetWorld(), _RoundBeginSFX, 1.0f);
+	}
+
+	_CurrentRound++;
+
+	UE_LOG(LogTemp, Warning, TEXT("Round: %i"), _CurrentRound);
+
+	//Compounding Interest Formula
+	//A = P(1 + r/n)^nt 
+	//A: Amount P: Principal R: Interest Rate N: Number of times interest is compounded per T T: Time (current round in this case)
+	_RemainingZombiesToSpawn = _StartingAmountOfZombies * FMath::Pow((1 + _PercentageIncrease / 1), 1 * _CurrentRound);
+
+	UE_LOG(LogTemp, Warning, TEXT("This round will have: %i"), _RemainingZombiesToSpawn);
+
+	GetWorld()->GetTimerManager().SetTimer(_zombieSpawnTimerHandle, this, &ABTECZombiesGameModeBase::SpawnEnemy, 2.0f, true, 1.0f);
+	_TransitioningToNextRound = false;
 }
 
 void ABTECZombiesGameModeBase::ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass)
@@ -87,8 +117,17 @@ void ABTECZombiesGameModeBase::EnemyKilled(AZombieEnemy* KilledEnemy)
 {
 	if (KilledEnemy == nullptr) return;
 
+	_RemainingZombiesAlive--;
+
+	//No more zombies to spawn and no more zombies alive
+	if (_RemainingZombiesToSpawn == 0 && _RemainingZombiesAlive <= 0) {
+		_TransitioningToNextRound = true;
+		GetWorld()->GetTimerManager().SetTimer(_RoundTransitionTimerHandle, this, &ABTECZombiesGameModeBase::StartNewRound, _TimeBetweenRounds, false);
+		GetWorld()->GetTimerManager().ClearTimer(_zombieSpawnTimerHandle);
+	}
+
 	_CurrentPoints += KilledEnemy->GetKillPoints();
-	UE_LOG(LogTemp, Warning, TEXT("Current Points: %i"), _CurrentPoints);
+	//UE_LOG(LogTemp, Warning, TEXT("Current Points: %i"), _CurrentPoints);
 }
 
 void ABTECZombiesGameModeBase::PlayerKilled(AZombiePlayerController* KilledPlayer)
