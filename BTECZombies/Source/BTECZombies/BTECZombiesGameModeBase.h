@@ -89,6 +89,9 @@ protected:
 	USoundBase* _RoundBeginSFX;
 
 	UPROPERTY(EditDefaultsOnly)
+	USoundBase* _MapAmbienceMusic;
+
+	UPROPERTY(EditDefaultsOnly)
 	float _TimeBetweenRounds = 5.0f;
 private:
 	int _CurrentPoints = 0;

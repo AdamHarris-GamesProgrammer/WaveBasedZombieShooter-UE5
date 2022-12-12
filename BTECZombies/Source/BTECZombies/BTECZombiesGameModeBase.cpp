@@ -41,7 +41,9 @@ void ABTECZombiesGameModeBase::InitGame(const FString& MapName, const FString& O
 
 	GetWorld()->GetTimerManager().SetTimer(_RoundTransitionTimerHandle, this, &ABTECZombiesGameModeBase::StartNewRound, _TimeBetweenRounds, false);
 
-	//GetWorld()->GetTimerManager().SetTimer(_zombieSpawnTimerHandle, this, &ABTECZombiesGameModeBase::SpawnEnemy, 2.0f, true, 1.0f);
+	if (_MapAmbienceMusic) {
+		UGameplayStatics::PlaySound2D(GetWorld(), _MapAmbienceMusic, 0.15f);
+	}
 }
 
 void ABTECZombiesGameModeBase::Tick(float DeltaTime)
