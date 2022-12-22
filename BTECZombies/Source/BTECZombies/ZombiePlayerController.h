@@ -7,6 +7,8 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/PlayerController.h"
 
+#include "ZombieRoom.h"
+
 #include "ZombieWeapon.h"
 #include "ZombiePlayerController.generated.h"
 
@@ -120,6 +122,12 @@ public:
 
 	void EquipWeapon(AZombieWeapon* Weapon);
 
+	void AddRoom(class AZombieRoom* room);
+
+	class TArray<AZombieRoom*> GetRooms() const {
+		return _PastRooms;
+	}
+
 protected:
 	UPROPERTY(VisibleAnywhere)
 	class UCameraComponent* _pCameraComponent;
@@ -146,6 +154,9 @@ protected:
 	class AZombieWindow* _NearbyWindow = nullptr;
 	class AZombieDoor* _NearbyDoor = nullptr;
 
+	class AZombieRoom* _CurrentRoom = nullptr;
+
+	TArray<class AZombieRoom*> _PastRooms;
 
 	float _currentHealth;
 

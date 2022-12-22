@@ -5,11 +5,13 @@
 #include "ZombieDoor.h"
 #include "ZombieWindow.h"
 #include "Kismet/GameplayStatics.h"
+#include "ZombiePlayerController.h"
+#include "Components/BoxComponent.h"
 
 void ARoomVolume::LoadStartAttributes()
 {
 	UWorld* World = GetWorld();
-	
+
 	TArray<AActor*> doors;
 	UGameplayStatics::GetAllActorsOfClass(World, AZombieDoor::StaticClass(), doors);
 
@@ -21,6 +23,8 @@ void ARoomVolume::LoadStartAttributes()
 
 	_WindowsInVolume = CheckIntersect<AZombieWindow>(windows);
 	UE_LOG(LogTemp, Warning, TEXT("Windows in Room: %i"), _WindowsInVolume.Num());
+
+	bGenerateOverlapEventsDuringLevelStreaming = true;
 }
 
 void ARoomVolume::LoadEndAttributes()
@@ -28,7 +32,7 @@ void ARoomVolume::LoadEndAttributes()
 	for (int i = 0; i < _DoorsInVolume.Num(); ++i) {
 		AZombieDoor* door = _DoorsInVolume[i];
 
-		door->SetRoom(door->GetClosestRoomCheck(GetActorLocation()), this);
+		//door->SetRoom(door->GetClosestRoomCheck(GetActorLocation()), this);
 	}
 }
 
@@ -38,6 +42,16 @@ void ARoomVolume::ActivateRoom()
 		_WindowsInVolume[i]->ActivateWindow();
 	}
 }
+
+void ARoomVolume::BeginPlay()
+{
+	Super::BeginPlay();
+
+	//_pBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Collider"));
+	//_pBox->SetupAttachment(RootComponent);
+}
+
+
 
 template<typename T>
 TArray<T*> ARoomVolume::CheckIntersect(TArray<AActor*> Input)

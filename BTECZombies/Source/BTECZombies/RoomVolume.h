@@ -21,6 +21,8 @@ public:
 
 	void ActivateRoom();
 
+	virtual void BeginPlay() override;
+
 	template<typename T>
 	TArray<T*> CheckIntersect(TArray<AActor*> Input);
 
@@ -31,9 +33,14 @@ public:
 protected:
 	UPROPERTY(EditAnywhere)
 	bool _ActivateOnBeginPlay = false;
+
+	class UBoxComponent* _pBox;
+
+
+
 private:
 	TArray<class AZombieDoor*> _DoorsInVolume;
-	TArray<class AZombieWindow*> _WindowsInVolume;
+	TArray <class AZombieWindow* > _WindowsInVolume;
 
 };
 

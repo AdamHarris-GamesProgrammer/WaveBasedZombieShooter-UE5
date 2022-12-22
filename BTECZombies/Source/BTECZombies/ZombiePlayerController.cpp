@@ -290,3 +290,22 @@ void AZombiePlayerController::EquipWeapon(AZombieWeapon* Weapon)
 	}
 }
 
+void AZombiePlayerController::AddRoom(AZombieRoom* room) {
+
+	_CurrentRoom = room;
+	UE_LOG(LogTemp, Warning, TEXT("Set Room"));
+
+	_PastRooms.Insert(room, 0);
+
+	if (_PastRooms.Num() > 3) {
+		_PastRooms.RemoveAt(3);
+	}
+
+
+	UE_LOG(LogTemp, Warning, TEXT("Rooms Array contains"));
+	for (auto* r : _PastRooms) {
+		UE_LOG(LogTemp, Warning, TEXT("Room Name: %s"), *r->GetName());
+	}
+
+}
+

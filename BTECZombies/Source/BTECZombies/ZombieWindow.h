@@ -21,6 +21,10 @@ public:
 
 	void BoardUpWindow();
 
+	bool IsActivated() const {
+		return _IsActivated;
+	}
+
 	int GetBlockCost() const {
 		return _BlockCost;
 	}
@@ -30,6 +34,10 @@ public:
 	}
 
 	void ActivateWindow();
+
+	TArray<AZombieSpawnPoint*> GetSpawnPoints() const {
+		return _ConnectedSpawnPoints;
+	}
 
 	void RemoveZombie(class AZombieEnemy* Zombie);
 

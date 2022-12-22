@@ -29,11 +29,11 @@ public:
 
 	void OpenDoor();
 
-	class ARoomVolume* GetClosestRoom(const FVector Input);
-	class ARoomVolume* GetOppositeRoom(const FVector Input);
+	class AZombieRoom* GetClosestRoom(const FVector Input);
+	class AZombieRoom* GetOppositeRoom(const FVector Input);
 	USceneComponent* GetClosestRoomCheck(const FVector Input);
 
-	void SetRoom(USceneComponent* ClosestCheck, class ARoomVolume* InputRoom);
+	void SetRoom(USceneComponent* ClosestCheck, class AZombieRoom* InputRoom);
 
 protected:
 	// Called when the game starts or when spawned
@@ -64,8 +64,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	USceneComponent* _RoomBCheck;
 
-	class ARoomVolume* _RoomA;
-	class ARoomVolume* _RoomB;
+	class AZombieRoom* _RoomA;
+	class AZombieRoom* _RoomB;
 
 	UPROPERTY(EditAnywhere)
 	int _CostToOpen = 500;

@@ -7,7 +7,9 @@
 #include "ZombieEnemy.h"
 #include "ZombieSpawnPoint.h"
 #include "ZombieMainPlayerController.h"
+#include "ZombieWindow.h"
 #include "RoomVolume.h"
+#include "ZombieRoom.h"
 
 void ABTECZombiesGameModeBase::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
@@ -16,20 +18,20 @@ void ABTECZombiesGameModeBase::InitGame(const FString& MapName, const FString& O
 	UWorld* World = GetWorld();
 
 	TArray<AActor*> rooms;
-	UGameplayStatics::GetAllActorsOfClass(World, ARoomVolume::StaticClass(), rooms);
+	UGameplayStatics::GetAllActorsOfClass(World, AZombieRoom::StaticClass(), rooms);
 
 	for (int i = 0; i < rooms.Num(); ++i) {
-		ARoomVolume* r = Cast <ARoomVolume>(rooms[i]);
-		r->LoadStartAttributes();
+		AZombieRoom* r = Cast<AZombieRoom>(rooms[i]);
+		//r->LoadStartAttributes();
 	}
 
 	for (int i = 0; i < rooms.Num(); ++i) {
-		ARoomVolume* r = Cast <ARoomVolume>(rooms[i]);
+		AZombieRoom* r = Cast <AZombieRoom>(rooms[i]);
 		r->LoadEndAttributes();
 	}
 		
 	for (int i = 0; i < rooms.Num(); ++i) {
-		ARoomVolume* r = Cast <ARoomVolume>(rooms[i]);
+		AZombieRoom* r = Cast <AZombieRoom>(rooms[i]);
 		if (r) {
 			if (r->ActivateOnBeginPlay()) {
 				r->ActivateRoom();
@@ -42,7 +44,7 @@ void ABTECZombiesGameModeBase::InitGame(const FString& MapName, const FString& O
 	GetWorld()->GetTimerManager().SetTimer(_RoundTransitionTimerHandle, this, &ABTECZombiesGameModeBase::StartNewRound, _TimeBetweenRounds, false);
 
 	if (_MapAmbienceMusic) {
-		UGameplayStatics::PlaySound2D(GetWorld(), _MapAmbienceMusic, 0.15f);
+		UGameplayStatics::PlaySound2D(GetWorld(), _MapAmbienceMusic, 0.15f, 1.0f, 0.0f);
 	}
 }
 
@@ -69,15 +71,50 @@ void ABTECZombiesGameModeBase::SpawnEnemy()
 
 	if (_RemainingZombiesToSpawn <= 0) return;
 
-	int randIndex = FMath::RandRange(0, _SpawnPoints.Num() - 1);
+	//Get the player
+	//Get the past three rooms the player has been in and get the windows attached to it
+	//Get all the spawn points attached to those windows
+	//Choose a spawn point out of those
 
-	AZombieSpawnPoint* Spawner = _SpawnPoints[randIndex];
-	if (Spawner != nullptr) {
-		Spawner->SpawnEnemy();
+	AZombiePlayerController* pc = Cast<AZombiePlayerController>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (pc) {
+		TArray<AZombieRoom*> rooms = pc->GetRooms();
+
+		if (rooms.Num() != 0) {
+			TArray<AZombieWindow*> windowsAvailable;
+			for (auto* r : rooms) {
+				windowsAvailable.Append(r->GetWindows());
+			}
+
+			if (windowsAvailable.Num() != 0) {
+				TArray<AZombieSpawnPoint*> spawners;
+				for (auto* w : windowsAvailable) {
+					if (!w->IsActivated()) continue;
+					spawners.Append(w->GetSpawnPoints());
+				}
+
+				if (spawners.Num() == 0) {
+					UE_LOG(LogTemp, Warning, TEXT("No Spawners"));
+				}
+
+				int randIndex = FMath::RandRange(0, spawners.Num() - 1);
+
+				AZombieSpawnPoint* Spawner = spawners[randIndex];
+				if (Spawner != nullptr) {
+					Spawner->SpawnEnemy();
+				}
+
+				_RemainingZombiesToSpawn--;
+				_RemainingZombiesAlive++;
+			}
+			else {
+				UE_LOG(LogTemp, Warning, TEXT("No windows"));
+			}
+		}
+		else {
+			UE_LOG(LogTemp, Warning, TEXT("No rooms"));
+		}
 	}
-
-	_RemainingZombiesToSpawn--;
-	_RemainingZombiesAlive++;
 }
 
 void ABTECZombiesGameModeBase::StartNewRound()

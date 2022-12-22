@@ -5,6 +5,7 @@
 
 #include "Components/BoxComponent.h"
 #include "RoomVolume.h"
+#include "ZombieRoom.h"
 
 #include "ZombiePlayerController.h"
 
@@ -49,7 +50,7 @@ inline void AZombieDoor::OpenDoor() {
 	if (_RoomB) _RoomB->ActivateRoom();
 }
 
-ARoomVolume* AZombieDoor::GetClosestRoom(const FVector Input)
+AZombieRoom* AZombieDoor::GetClosestRoom(const FVector Input)
 {
 	if (_RoomA == nullptr && _RoomB == nullptr) return nullptr;
 	if (_RoomA == nullptr) return _RoomB;
@@ -61,7 +62,7 @@ ARoomVolume* AZombieDoor::GetClosestRoom(const FVector Input)
 	return distToA < distToB ? _RoomA : _RoomB;
 }
 
-ARoomVolume* AZombieDoor::GetOppositeRoom(const FVector Input)
+AZombieRoom* AZombieDoor::GetOppositeRoom(const FVector Input)
 {
 	if (_RoomA == nullptr && _RoomB == nullptr) return nullptr;
 	if (_RoomA == nullptr) return _RoomB;
@@ -81,7 +82,7 @@ USceneComponent* AZombieDoor::GetClosestRoomCheck(const FVector Input)
 	return distToA < distToB ? _RoomACheck : _RoomBCheck;
 }
 
-void AZombieDoor::SetRoom(USceneComponent* ClosestCheck, class ARoomVolume* InputRoom)
+void AZombieDoor::SetRoom(USceneComponent* ClosestCheck, class AZombieRoom* InputRoom)
 {
 	if (ClosestCheck == _RoomACheck) {
 		_RoomA = InputRoom;
