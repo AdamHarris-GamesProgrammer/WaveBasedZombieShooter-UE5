@@ -9,7 +9,9 @@
 #include "ZombieMainPlayerController.h"
 #include "ZombieWindow.h"
 #include "RoomVolume.h"
+#include "ZombieSaveData.h"
 #include "ZombieRoom.h"
+#include "ZombieGameInstance.h"
 
 void ABTECZombiesGameModeBase::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
@@ -43,8 +45,22 @@ void ABTECZombiesGameModeBase::InitGame(const FString& MapName, const FString& O
 
 	GetWorld()->GetTimerManager().SetTimer(_RoundTransitionTimerHandle, this, &ABTECZombiesGameModeBase::StartNewRound, _TimeBetweenRounds, false);
 
+	UGameInstance* gi = UGameplayStatics::GetGameInstance(GetWorld());
+	UZombieGameInstance* zgi = Cast<UZombieGameInstance>(gi);
+
+	if (zgi) {
+		zgi->LoadGame();
+		_saveData = zgi->_saveData;
+
+		_sfxVolume = _saveData->_sfxVolume;
+		_musicVolume = _saveData->_musicVolume;
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Game Instance not acquired"));
+	}
+
 	if (_MapAmbienceMusic) {
-		UGameplayStatics::PlaySound2D(GetWorld(), _MapAmbienceMusic, 0.15f, 1.0f, 0.0f);
+		UGameplayStatics::PlaySound2D(GetWorld(), _MapAmbienceMusic, 0.15f * _musicVolume, 1.0f, 0.0f);
 	}
 }
 
@@ -120,7 +136,7 @@ void ABTECZombiesGameModeBase::SpawnEnemy()
 void ABTECZombiesGameModeBase::StartNewRound()
 {
 	if (_RoundBeginSFX) {
-		UGameplayStatics::PlaySound2D(GetWorld(), _RoundBeginSFX, 1.0f);
+		UGameplayStatics::PlaySound2D(GetWorld(), _RoundBeginSFX, 1.0f * _sfxVolume);
 	}
 
 	_CurrentRound++;

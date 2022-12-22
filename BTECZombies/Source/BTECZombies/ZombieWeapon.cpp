@@ -5,6 +5,7 @@
 #include "Particles/ParticleSystem.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "BTECZombiesGameModeBase.h"
 #include "ZombieEnemy.h"
 
 // Sets default values
@@ -33,6 +34,8 @@ void AZombieWeapon::BeginPlay()
 	Super::BeginPlay();
 	
 	_AccuracyDebuff = 1.0f - _Accuracy;
+
+	_gm = Cast<ABTECZombiesGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
 // Called every frame
@@ -89,7 +92,7 @@ void AZombieWeapon::StartReload()
 	GetWorld()->GetTimerManager().SetTimer(_ReloadTimerHandle, this, &AZombieWeapon::FinishReload, _ReloadDuration, false);
 	
 	if (_StartReloadSFX != nullptr) {
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), _StartReloadSFX, GetActorLocation());
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), _StartReloadSFX, GetActorLocation(), 1.0f * _gm->GetSFXVoume());
 	}
 }
 
@@ -100,7 +103,7 @@ void AZombieWeapon::FinishReload()
 	GetWorld()->GetTimerManager().ClearTimer(_ReloadTimerHandle);
 
 	if (_EndReloadSFX != nullptr) {
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), _EndReloadSFX, GetActorLocation());
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), _EndReloadSFX, GetActorLocation(), 1.0f * _gm->GetSFXVoume());
 	}
 }
 
@@ -116,13 +119,13 @@ void AZombieWeapon::Fire()
 
 	if (_CurrentBulletsInClip == 0) {
 		if (_DryFireSFX != nullptr) {
-			UGameplayStatics::PlaySoundAtLocation(World, _DryFireSFX, _MuzzleFlashLocation->GetComponentLocation());
+			UGameplayStatics::PlaySoundAtLocation(World, _DryFireSFX, _MuzzleFlashLocation->GetComponentLocation(), 1.0f * _gm->GetSFXVoume());
 		}
 		return;
 	}
 	
 	if (_FireSFX != nullptr) {
-		UGameplayStatics::PlaySoundAtLocation(World, _FireSFX, _MuzzleFlashLocation->GetComponentLocation());
+		UGameplayStatics::PlaySoundAtLocation(World, _FireSFX, _MuzzleFlashLocation->GetComponentLocation(), 1.0f * _gm->GetSFXVoume());
 	}
 
 	_CurrentBulletsInClip--;

@@ -124,6 +124,9 @@
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/UI/BP_MainMenu.uasset",
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/UI/BP_OptionsWidget.uasset",
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/BP_RoomController.uasset",
+				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Sprites/Menu_Shot.uasset",
+				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/ZombieSaveFile.uasset",
+				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/BP_GameInstance.uasset",
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/BP_DoorFrame.uasset",
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/UI/BP_PlayerHealthBar.uasset",
 				"C:/Dev/UnrealEngine/WaveBasedZombieShooter/BTECZombies/Content/Blueprints/BP_Zombie.uasset"

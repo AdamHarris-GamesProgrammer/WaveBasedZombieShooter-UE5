@@ -64,6 +64,14 @@ public:
 
 	void AddActiveSpawnPoint(class AZombieSpawnPoint* Spawn);
 
+	float GetSFXVoume() const {
+		return _sfxVolume;
+	}
+
+	float GetMusicVolume() const {
+		return _musicVolume;
+	}
+
 protected:
 	UPROPERTY(EditAnywhere, Category = UI)
 	TSubclassOf<UUserWidget> _StartingWidgetClass;
@@ -106,4 +114,9 @@ private:
 	FTimerHandle _zombieSpawnTimerHandle;
 
 	FTimerHandle _RoundTransitionTimerHandle;
+
+	class UZombieSaveData* _saveData;
+
+	float _sfxVolume = 1.0f;
+	float _musicVolume = 1.0f;
 };

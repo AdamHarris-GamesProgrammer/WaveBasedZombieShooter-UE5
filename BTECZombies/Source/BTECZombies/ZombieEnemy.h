@@ -113,5 +113,5 @@ protected:
 
 	class AZombieWindow* _NearbyWindow = nullptr;
 
-
+	class ABTECZombiesGameModeBase* _gm;
 };

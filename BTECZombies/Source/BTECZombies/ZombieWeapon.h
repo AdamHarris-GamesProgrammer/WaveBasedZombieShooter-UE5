@@ -192,4 +192,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	float _ReloadDuration = 2.5f;
+
+	class ABTECZombiesGameModeBase* _gm;
 };
