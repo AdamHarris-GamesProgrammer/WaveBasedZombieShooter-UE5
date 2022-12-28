@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "AmmoTypes.h"
 
 #include "ZombieWeapon.generated.h"
 
@@ -60,10 +61,7 @@ public:
 	}
 
 	UFUNCTION(BlueprintCallable)
-		FString GetAmmoText() {
-		FString val = FString::FromInt(_CurrentBulletsInClip) + "/" + FString::FromInt(_ClipSize);
-		return val;
-	}
+	FString GetAmmoText();
 
 	UFUNCTION(BlueprintCallable)
 		float GetReloadPercentage() {
@@ -194,4 +192,7 @@ protected:
 	float _ReloadDuration = 2.5f;
 
 	class ABTECZombiesGameModeBase* _gm;
+
+	UPROPERTY(EditAnywhere)
+	TEnumAsByte<AmmoType> _AmmoType;
 };

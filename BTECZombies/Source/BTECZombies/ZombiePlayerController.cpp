@@ -6,6 +6,7 @@
 
 #include "ZombieWindow.h"
 #include "ZombieDoor.h"
+#include "ZombieWeapon.h"
 #include "WeaponSpawnPoint.h"
 #include "Components/CapsuleComponent.h"
 #include "BTECZombiesGameModeBase.h"
@@ -53,6 +54,10 @@ void AZombiePlayerController::BeginPlay()
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using AZombiePlayerController"));
 
 	_currentHealth = _maxHealth;
+
+	for (int i = 0; i < (int)AmmoType::AmmoTypeSize; ++i) {
+		_AmmoStore.Add(60);
+	}
 
 	AZombieWeapon* weapon = GetWorld()->SpawnActor<AZombieWeapon>(_StartingWeapon);
 	if (weapon) {
@@ -307,5 +312,29 @@ void AZombiePlayerController::AddRoom(AZombieRoom* room) {
 		UE_LOG(LogTemp, Warning, TEXT("Room Name: %s"), *r->GetName());
 	}
 
+}
+
+bool AZombiePlayerController::HasAmmo(AmmoType type) const
+{
+	return _AmmoStore[(int)type] > 0;
+}
+
+int AZombiePlayerController::ConsumeAmmo(AmmoType type, int amount)
+{
+	int bullets = _AmmoStore[(int)type];
+
+	//If we are requesting more ammo than we have
+	if (bullets < amount) {
+		_AmmoStore[(int)type] = 0;
+		return bullets;
+	}
+
+	//If we have more ammo than what we are requesting
+	if (bullets >= amount) {
+		_AmmoStore[(int)type] -= amount;
+		return amount;
+	}
+
+	return 0;
 }
 

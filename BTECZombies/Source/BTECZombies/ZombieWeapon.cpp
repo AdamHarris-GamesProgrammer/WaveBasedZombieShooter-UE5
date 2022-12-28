@@ -7,6 +7,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "BTECZombiesGameModeBase.h"
 #include "ZombieEnemy.h"
+#include "ZombiePlayerController.h"
 
 // Sets default values
 AZombieWeapon::AZombieWeapon()
@@ -88,6 +89,16 @@ void AZombieWeapon::Tick(float DeltaTime)
 void AZombieWeapon::StartReload()
 {
 	if (_isReloading) return;
+
+	//Get player and check we have the required ammo type
+	AZombiePlayerController* pc = Cast<AZombiePlayerController>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (pc) {
+		if (!pc->HasAmmo(_AmmoType)) {
+			//TODO: Turn ammo ui red here
+			return;
+		}
+	}
+
 	_isReloading = true;
 	GetWorld()->GetTimerManager().SetTimer(_ReloadTimerHandle, this, &AZombieWeapon::FinishReload, _ReloadDuration, false);
 	
@@ -99,12 +110,31 @@ void AZombieWeapon::StartReload()
 void AZombieWeapon::FinishReload()
 {
 	_isReloading = false;
-	_CurrentBulletsInClip = _ClipSize;
+
+	//Get player and consume ammo from ammo store
+	AZombiePlayerController* pc = Cast<AZombiePlayerController>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (pc) {
+		//clip size 7 bullets in clip 3. 7 - 3 = 4. Therefore 4 bullets are required
+		int neededAmmo = _ClipSize - _CurrentBulletsInClip;
+		_CurrentBulletsInClip += pc->ConsumeAmmo(_AmmoType, neededAmmo);
+	}
+
 	GetWorld()->GetTimerManager().ClearTimer(_ReloadTimerHandle);
 
 	if (_EndReloadSFX != nullptr) {
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), _EndReloadSFX, GetActorLocation(), 1.0f * _gm->GetSFXVoume());
 	}
+}
+
+inline FString AZombieWeapon::GetAmmoText() {
+	int totalBullets = 0;
+
+	AZombiePlayerController* pc = Cast<AZombiePlayerController>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (pc) {
+		totalBullets = pc->GetAmmo(_AmmoType);
+	}
+	FString val = FString::FromInt(_CurrentBulletsInClip) + "/" + FString::FromInt(totalBullets);
+	return val;
 }
 
 void AZombieWeapon::Fire()

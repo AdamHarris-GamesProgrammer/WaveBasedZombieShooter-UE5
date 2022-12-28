@@ -8,11 +8,10 @@
 #include "GameFramework/PlayerController.h"
 
 #include "ZombieRoom.h"
-
 #include "ZombieWeapon.h"
+#include "AmmoTypes.h"
+
 #include "ZombiePlayerController.generated.h"
-
-
 
 UCLASS()
 class BTECZOMBIES_API AZombiePlayerController : public ACharacter
@@ -90,13 +89,15 @@ public:
 	}
 
 	UFUNCTION(BlueprintCallable)
-	AZombieWeapon* GetCurrentWeapon() {
+	class AZombieWeapon* GetCurrentWeapon() {
 		return _CurrentWeapon;
 	}
 
 	UFUNCTION(BlueprintCallable)
 	FString GetAmmoText() {
 		if (_CurrentWeapon == nullptr) return "";
+
+		return _CurrentWeapon->GetAmmoText();
 
 		FString val = FString::FromInt(_CurrentWeapon->GetRemainingBullets()) + "/" + FString::FromInt(_CurrentWeapon->GetClipSize());
 		return val;
@@ -120,9 +121,16 @@ public:
 		_NearbyWeaponToPickup = SpawnPoint;
 	}
 
-	void EquipWeapon(AZombieWeapon* Weapon);
+	void EquipWeapon(class AZombieWeapon* Weapon);
 
 	void AddRoom(class AZombieRoom* room);
+
+	bool HasAmmo(AmmoType type) const;
+	int ConsumeAmmo(AmmoType type, int amount);
+
+	int GetAmmo(AmmoType type) const {
+		return _AmmoStore[(int)type];
+	}
 
 	class TArray<AZombieRoom*> GetRooms() const {
 		return _PastRooms;
@@ -139,7 +147,7 @@ protected:
 	FVector MuzzleOffset;
 
 	UPROPERTY(EditAnywhere, Category = Combat)
-	TSubclassOf<AZombieWeapon> _StartingWeapon;
+	TSubclassOf<class AZombieWeapon> _StartingWeapon;
 
 	UPROPERTY(VisibleAnywhere)
 	float _maxHealth = 100.0f;
@@ -157,6 +165,10 @@ protected:
 	class AZombieRoom* _CurrentRoom = nullptr;
 
 	TArray<class AZombieRoom*> _PastRooms;
+
+	TArray<uint32_t> _AmmoStore;
+
+
 
 	float _currentHealth;
 
