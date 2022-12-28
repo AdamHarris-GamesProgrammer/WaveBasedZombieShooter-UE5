@@ -71,16 +71,6 @@ void AZombiePlayerController::BeginPlay()
 void AZombiePlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (_CurrentWeapon == nullptr) return;
-
-	if (_CurrentWeapon->IsFiring()) {
-		FVector CameraLocation;
-		FRotator CameraRotation;
-		GetActorEyesViewPoint(CameraLocation, CameraRotation);
-
-		_CurrentWeapon->SetRotation(CameraRotation);
-	}
 }
 
 // Called to bind functionality to input
@@ -174,7 +164,6 @@ void AZombiePlayerController::Fire()
 		FRotator CameraRotation;
 		GetActorEyesViewPoint(CameraLocation, CameraRotation);
 
-		_CurrentWeapon->SetRotation(CameraRotation);
 		_CurrentWeapon->StartFiring();
 	}
 }
@@ -281,7 +270,7 @@ void AZombiePlayerController::EquipWeapon(AZombieWeapon* Weapon)
 	FAttachmentTransformRules rules = FAttachmentTransformRules(EAttachmentRule::KeepRelative, true);
 
 	Weapon->AttachToComponent(_pFPSMesh, rules, "s_LeftHand");
-	Weapon->Init(GetController());
+	Weapon->Init(GetController(), this);
 	Weapon->Hide(true);
 
 	if (_PrimaryWeapon == nullptr) {

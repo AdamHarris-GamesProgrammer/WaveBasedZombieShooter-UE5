@@ -21,6 +21,12 @@ struct Bullet {
 
 		return World->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility);
 	}
+
+	void UpdateAttributes(float lifetime) {
+		if (Time > lifetime) {
+			_Stop = true;
+		}
+	}
 };
 
 UCLASS()
@@ -32,7 +38,7 @@ public:
 	// Sets default values for this actor's properties
 	AZombieWeapon();
 
-	void Init(AController* OwningController);
+	void Init(class AController* OwningController, class AZombiePlayerController* WeaponOwner);
 
 protected:
 	// Called when the game starts or when spawned
@@ -94,21 +100,22 @@ public:
 
 	void StartFiring();
 	void Fire();
+	void CreateBullet(FVector dir);
 	void EndFiring();
-
-	void SetRotation(FRotator Rotation) {
-		_Rotation = Rotation;
-	}
-	void UpdateAttributes(Bullet& Bullet);
 
 	FVector GetPosition(Bullet& Bullet);
 
+private:
+	void UpdateBullets(float DeltaTime);
+	void Play3DSound(class USoundBase* sfx, FVector location, float volumeMultiplier);
+	void Play3DEmmiter(class UNiagaraSystem* vfx, FVector location, FRotator rotation = FRotator::ZeroRotator);
 protected:
 	bool _isReloading = false;
 
 	FTimerHandle _ReloadTimerHandle;
 
-	AController* _OwningController;
+	class AController* _OwningController;
+	class AZombiePlayerController* _WeaponOwner;
 
 	int _CurrentShootPatternIndex = 0;
 
@@ -117,7 +124,6 @@ protected:
 	float _AccuracyDebuff;
 
 	FTimerHandle _AutoFireTimerHandle;
-	FRotator _Rotation;
 	bool _IsFiring = false;
 
 	TArray<Bullet> _Bullets;
