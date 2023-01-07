@@ -46,7 +46,7 @@ void AZombieWeapon::Tick(float DeltaTime)
 
 void AZombieWeapon::StartReload()
 {
-	if (_isReloading) return;
+	if (_isReloading || _CurrentBulletsInClip == _ClipSize) return;
 
 	//Get weapon owner and check we have the required ammo type
 	if (_WeaponOwner && !_WeaponOwner->HasAmmo(_AmmoType)) {
@@ -177,7 +177,7 @@ void AZombieWeapon::UpdateBullets(float DeltaTime)
 
 		Play3DEmmiter(_BulletTrailVFX, p0, dir.Rotation());
 
-		DrawDebugLine(GetWorld(), p0, p1, FColor::Red, false, 5.0f, 0U, 1.0f);
+		//DrawDebugLine(GetWorld(), p0, p1, FColor::Red, false, 5.0f, 0U, 1.0f);
 
 		if (bullet.CastSegment(World, hit, p0, p1)) {
 			if (hit.GetActor() == nullptr) continue;

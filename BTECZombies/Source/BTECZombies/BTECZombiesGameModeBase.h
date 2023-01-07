@@ -100,6 +100,9 @@ protected:
 	USoundBase* _MapAmbienceMusic;
 
 	UPROPERTY(EditDefaultsOnly)
+	TArray<TSubclassOf<class AAmmoPickup>> _AmmoDrops;
+
+	UPROPERTY(EditDefaultsOnly)
 	float _TimeBetweenRounds = 5.0f;
 private:
 	int _CurrentPoints = 0;
@@ -119,4 +122,7 @@ private:
 
 	float _sfxVolume = 1.0f;
 	float _musicVolume = 1.0f;
+
+	UPROPERTY(EditDefaultsOnly)
+	float _chanceToDropAmmo = 12.5f;
 };

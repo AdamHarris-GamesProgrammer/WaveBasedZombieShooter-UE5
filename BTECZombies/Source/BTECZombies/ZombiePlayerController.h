@@ -127,7 +127,7 @@ public:
 
 	bool HasAmmo(AmmoType type) const;
 	int ConsumeAmmo(AmmoType type, int amount);
-
+	void GainAmmo(AmmoType type, int amount);
 	int GetAmmo(AmmoType type) const {
 		return _AmmoStore[(int)type];
 	}

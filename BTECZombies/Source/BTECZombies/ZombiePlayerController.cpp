@@ -219,6 +219,7 @@ void AZombiePlayerController::Reload()
 
 void AZombiePlayerController::MouseWheelUp()
 {
+	if (_CurrentWeapon->IsReloading()) return;
 	if (_SecondaryWeapon == nullptr) return;
 
 	if (_CurrentWeapon == _PrimaryWeapon) {
@@ -235,6 +236,7 @@ void AZombiePlayerController::MouseWheelUp()
 
 void AZombiePlayerController::MouseWheelDown()
 {
+	if (_CurrentWeapon->IsReloading()) return;
 	if (_SecondaryWeapon == nullptr) return;
 
 	if (_CurrentWeapon == _PrimaryWeapon) {
@@ -325,5 +327,10 @@ int AZombiePlayerController::ConsumeAmmo(AmmoType type, int amount)
 	}
 
 	return 0;
+}
+
+void AZombiePlayerController::GainAmmo(AmmoType type, int amount)
+{
+	_AmmoStore[(int)type] += amount;
 }
 

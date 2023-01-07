@@ -10,7 +10,9 @@
 #include "ZombieWindow.h"
 #include "RoomVolume.h"
 #include "ZombieSaveData.h"
+#include "AmmoPickup.h"
 #include "ZombieRoom.h"
+#include "NavigationSystem.h"
 #include "ZombieGameInstance.h"
 
 void ABTECZombiesGameModeBase::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
@@ -111,6 +113,7 @@ void ABTECZombiesGameModeBase::SpawnEnemy()
 
 				if (spawners.Num() == 0) {
 					UE_LOG(LogTemp, Warning, TEXT("No Spawners"));
+					return;
 				}
 
 				int randIndex = FMath::RandRange(0, spawners.Num() - 1);
@@ -183,6 +186,18 @@ void ABTECZombiesGameModeBase::EnemyKilled(AZombieEnemy* KilledEnemy)
 
 	_CurrentPoints += KilledEnemy->GetKillPoints();
 	//UE_LOG(LogTemp, Warning, TEXT("Current Points: %i"), _CurrentPoints);
+
+	float chance = FMath::RandRange(0.0f, 100.0f);
+	if (chance < _chanceToDropAmmo) {
+		FVector spawnLoc = KilledEnemy->GetActorLocation();
+
+		FNavLocation loc;
+		UNavigationSystemV1* nav = Cast<UNavigationSystemV1>(GetWorld()->GetNavigationSystem());
+
+		nav->GetRandomReachablePointInRadius(KilledEnemy->GetActorLocation(), 150.0f, loc);
+		int ammoIndex = FMath::RandRange(0, _AmmoDrops.Num() - 1);
+		GetWorld()->SpawnActor<AAmmoPickup>(_AmmoDrops[ammoIndex], loc, FRotator());
+	}
 }
 
 void ABTECZombiesGameModeBase::PlayerKilled(AZombiePlayerController* KilledPlayer)
